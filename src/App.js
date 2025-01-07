@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div>
       <Header />
-      <main className="bg-light">
+      <main className="bg-light py-4">
         <div className="container py-3">
           <div className="row gx-3 gy-3">
-            
             <div className="col-md-3">
               <div className="position-relative">
                 <img
@@ -33,7 +33,6 @@ function App() {
               </div>
             </div>
 
-           
             <div className="col-md-3">
               <div className="position-relative">
                 <img
@@ -58,7 +57,6 @@ function App() {
               </div>
             </div>
 
-           
             <div className="col-md-3">
               <div className="position-relative">
                 <img
@@ -83,7 +81,6 @@ function App() {
               </div>
             </div>
 
-            
             <div className="col-md-3">
               <div className="position-relative">
                 <img
@@ -109,7 +106,6 @@ function App() {
             </div>
           </div>
 
-          
           <div className="py-4">
             <img
               src="https://cdn.shopaccino.com/qarot/articles/blog-610669_l.jpg?v=513"
@@ -117,8 +113,59 @@ function App() {
               className="img-fluid w-100"
             />
           </div>
+
+          <div className="row py-2">
+           
+              <div className="col-md-6 d-flex align-items-stretch">
+              <div className="card h-100">
+                <img
+                  src="https://cdn.shopaccino.com/qarot/articles/july1-542525_s.jpg?v=523"
+                  class="card-img-top"
+                  alt="someImage"
+                  style={{
+                    objectFit: "cover",
+                    height: "300px", 
+                  }}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">Stylish – Wearing Shirts</h5>
+                  <p className="card-text">
+                    when it comes to the style of dressing, there are a variety
+                    of outfits men can wear which allow them to express their
+                    style as well as dress for the occasion.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 d-flex align-items-stretch">
+            <div className="card h-100">
+              
+                <img
+                  src="https://cdn.shopaccino.com/qarot/articles/qarot-21-3-160956l-283101_l.jpg?v=523"
+                  class="card-img-top"
+                  alt="someImage"
+                  style={{
+                    objectFit: "cover",
+                    height: "300px", 
+                  }}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">
+                    Stay Classy in a Classic Tuxedo
+                  </h5>
+                  <p className="card-text">
+                    A Tuxedo is a ready to wear men’s suit which suits perfectly
+                    any men out there. It’s the most stylish blazer...
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
