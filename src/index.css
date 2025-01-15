@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.carousel-inner img {
+  width: 100%;         /* Full width */
+  height: 600px;       /* Set a fixed height for all images */
+  object-fit: cover;   /* This ensures images fill the container and maintain aspect ratio */
+}
+.carousel-inner {
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  transition: transform 0.5s ease;
+}
+

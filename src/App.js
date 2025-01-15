@@ -1,4 +1,7 @@
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -107,24 +110,135 @@ function App() {
           </div>
 
           <div className="py-4">
-            <img
-              src="https://cdn.shopaccino.com/qarot/articles/blog-610669_l.jpg?v=513"
-              alt="imageS"
-              className="img-fluid w-100"
-            />
+            <div
+              id="carouselExampleSlidesOnly"
+              className="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div className="carousel-indicators">
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="0"
+                  className="active"
+                  aria-current="true"
+                  aria-label="Slide 1"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="1"
+                  aria-label="Slide 2"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="2"
+                  aria-label="Slide 3"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="3"
+                  aria-label="Slide 4"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="4"
+                  aria-label="Slide 5"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleSlidesOnly"
+                  data-bs-slide-to="5"
+                  aria-label="Slide 6"
+                ></button>
+              </div>
+
+              <div className="carousel-inner">
+                <div className="carousel-item active">
+                  <img
+                    src="https://cdn.shopaccino.com/qarot/slideshows/fest4-17692051353140_l.jpg?v=523"
+                    className="d-block w-100"
+                    alt="Festive Product 1"
+                  />
+                </div>
+                <div className="carousel-item">
+                  <img
+                    src="https://cdn.shopaccino.com/qarot/slideshows/fest3-17735653571598_l.jpg?v=523"
+                    className="d-block w-100"
+                    alt="Festive Product 2"
+                  />
+                </div>
+                <div className="carousel-item">
+                  <img
+                    src="https://cdn.shopaccino.com/qarot/articles/blog-610669_l.jpg?v=523"
+                    className="d-block w-100"
+                    alt="Blog Feature"
+                  />
+                </div>
+                <div className="carousel-item">
+                  <img
+                    src="https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/24FW_Knit/Women/KV-women-pc02.jpg"
+                    className="d-block w-100"
+                    alt="Women's Knit Collection"
+                  />
+                </div>
+                <div className="carousel-item">
+                  <img
+                    src="https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/24FW_Knit/Women/Fix/LineupBanner-women-Cashmere-05-pc.jpg"
+                    className="d-block w-100"
+                    alt="Women's Cashmere Collection"
+                  />
+                </div>
+                <div className="carousel-item">
+                  <img
+                    src="https://im.uniqlo.com/global-cms/spa/resf246a0a1f3f6c3844ad9ebcdd1c88400fr.jpg"
+                    className="d-block w-100"
+                    alt="UNIQLO Collection"
+                  />
+                </div>
+              </div>
+
+              <button
+                className="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleSlidesOnly"
+                data-bs-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Previous</span>
+              </button>
+
+              <button
+                className="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleSlidesOnly"
+                data-bs-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Next</span>
+              </button>
+            </div>
           </div>
 
           <div className="row py-2">
-           
-              <div className="col-md-6 d-flex align-items-stretch">
+            <div className="col-md-6 d-flex align-items-stretch">
               <div className="card h-100">
                 <img
                   src="https://cdn.shopaccino.com/qarot/articles/july1-542525_s.jpg?v=523"
-                  class="card-img-top"
+                  className="card-img-top"
                   alt="someImage"
                   style={{
                     objectFit: "cover",
-                    height: "300px", 
+                    height: "300px",
                   }}
                 />
                 <div className="card-body">
@@ -139,15 +253,14 @@ function App() {
             </div>
 
             <div className="col-md-6 d-flex align-items-stretch">
-            <div className="card h-100">
-              
+              <div className="card h-100">
                 <img
                   src="https://cdn.shopaccino.com/qarot/articles/qarot-21-3-160956l-283101_l.jpg?v=523"
                   class="card-img-top"
                   alt="someImage"
                   style={{
                     objectFit: "cover",
-                    height: "300px", 
+                    height: "300px",
                   }}
                 />
                 <div className="card-body">
@@ -161,7 +274,6 @@ function App() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </main>
