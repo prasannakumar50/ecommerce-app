@@ -26,3 +26,78 @@ code {
   transition: transform 0.5s ease;
 }
 
+
+
+
+
+
+.col-md-3:hover {
+  cursor: pointer;
+  transform: scale(1.05); /* Slightly enlarge the div on hover */
+  transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.col-md-3:hover .bg-dark {
+  background-color: rgba(0, 0, 0, 0.7); /* Make background darker on hover */
+}
+
+
+
+
+/* Price Range */
+.form-range {
+  background-color: #6c757d; /* bg-light */
+  border-radius: 4px; /* Smooth corners */
+  outline: none; /* Remove focus outline */
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: #6c757d; /* Neutral thumb color */
+}
+
+.form-range::-moz-range-thumb {
+  background-color: #6c757d; /* Neutral thumb color for Firefox */
+}
+
+.form-range::-ms-thumb {
+  background-color: #6c757d; /* Neutral thumb color for Edge */
+}
+
+/* Checkboxes */
+.form-check-input[type="checkbox"] {
+  background-color: #f8f9fa; /* bg-light */
+  border-color: #ddd; /* Light gray border */
+}
+
+.form-check-input[type="checkbox"]:checked {
+  background-color: #6c757d; /* Neutral color when checked */
+  border-color: #6c757d;
+}
+
+/* Radio Buttons */
+.form-check-input[type="radio"] {
+  background-color: #f8f9fa; /* bg-light */
+  border-color: #ddd; /* Light gray border */
+}
+
+.form-check-input[type="radio"]:checked {
+  background-color: #6c757d; /* Neutral color when checked */
+  border-color: #6c757d;
+}
+
+.card {
+  height: 300px; /* Set a fixed height for all cards */
+}
+
+.card-img-top {
+  height: 150px; /* Consistent image height */
+  object-fit: cover; /* Ensures the image fills the space */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
