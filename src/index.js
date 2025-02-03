@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 import Products from './components/Products';
 import ProductDetails from './components/ProductDetails';
+import CartPage from './components/CartPage';
 
 // import reportWebVitals from './reportWebVitals';
 
@@ -26,6 +27,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </BrowserRouter>
     </Provider>

@@ -162,7 +162,7 @@ const Products = () => {
                             e.stopPropagation();
                             dispatch(addToCart(product));
                           }}
-                          className="btn btn-primary mt-2"
+                          className="btn btn-dark mt-2"
                         >
                           Add to Cart
                         </button>
