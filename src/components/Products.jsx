@@ -33,7 +33,8 @@ const Products = () => {
   return (
     <div>
       <Header wishlist={wishlist} />
-      <main className="container py-4 bg-light">
+      <main className=" py-4 bg-light">
+        <div className="container">
         <div className="row">
           {/* Filters Sidebar */}
           <aside className="col-md-3">
@@ -164,7 +165,7 @@ const Products = () => {
                           }}
                           className="btn btn-dark mt-2"
                         >
-                          Add to Cart
+                          <b>Add to Cart</b>
                         </button>
                       </div>
                     </div>
@@ -173,6 +174,7 @@ const Products = () => {
               })}
             </div>
           </section>
+        </div>
         </div>
       </main>
     </div>

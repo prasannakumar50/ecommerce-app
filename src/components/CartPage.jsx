@@ -1,14 +1,31 @@
+import { useState } from "react";
 import Header from "./Header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart } from "../redux/cartReducer";
 
 const CartPage = () => {
+    const dispatch = useDispatch();
+    const [quantity, setQuantity] = useState(1)
     const cartItems = useSelector((state) => state.cart.cartItems);
+
+    const IncreaseQuantity = (e)=>{
+        setQuantity(prev => prev +1)
+    }
+
+    const DecreaseQuantity = (e)=>{
+        e.stopPropagation();
+        if(quantity === 1){
+          return 
+        }
+        setQuantity(prev => prev - 1)
+    }
 
     return (
         <div>
             <Header />
-
-            <main className="container bg-light py-4">
+            
+            <main className="bg-light py-4">
+            <div className="container">
                 <h2 className="text-center mb-4">My Cart</h2>
 
                 {cartItems.length === 0 ? (
@@ -27,10 +44,18 @@ const CartPage = () => {
                                     </div>
                                     <div className="col-md-8">
                                         <div className="card-body">
-                                            <h5 className="card-title">{item.name}</h5>
-                                            <p className="card-text">{item.description}</p>
-                                            <p className="card-text"><b>Price</b>: Rs.{item.price}</p>
-                                            <button>Remove from Cart</button>
+                                            <h5 className="card-title"><b>{item.title}</b></h5>
+                                            
+                                            <p className="card-text"><b>Rs.{item.price}</b></p>
+                                            <div className="py-2">
+                                                <button className="btn btn-dark me-3" onClick={DecreaseQuantity}><b>-</b></button>
+                                                <span className="me-3"><b>{quantity}</b></span>
+                                                <button className="btn btn-dark " onClick={IncreaseQuantity}><b>+</b></button> 
+                                            </div>
+                                            <div className="mt-3">
+                                            <button className="btn btn-dark me-3"><b>Add to wishlist</b></button>
+                                            <button className="btn btn-dark text-white" onClick={() => dispatch(removeFromCart(item.id))}><b>Remove from Cart</b></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +63,9 @@ const CartPage = () => {
                         ))}
                     </div>
                 )}
+                </div>
             </main>
+            
         </div>
     );
 };

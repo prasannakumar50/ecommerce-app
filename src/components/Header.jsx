@@ -72,7 +72,7 @@ const Header = ({ wishlist }) => {
             </div>
 
             {/* Login Button */}
-            <button className="btn btn-dark">Login</button>
+            <button className="btn btn-dark"><b>Login</b></button>
           </div>
         </div>
       </nav>
