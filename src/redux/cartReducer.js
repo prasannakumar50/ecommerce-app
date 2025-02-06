@@ -13,6 +13,7 @@ const initialState = {
         return{
           ...state, cartItems: state.cartItems.filter(item => item.id !== action.payload)
         }
+        
       default:
         return state;
     }

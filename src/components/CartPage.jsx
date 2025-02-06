@@ -31,41 +31,56 @@ const CartPage = () => {
                 {cartItems.length === 0 ? (
                     <p className="text-center">Your cart is empty.</p>
                 ) : (
-                    <div className="">
-                        {cartItems.map((item, index) => (
-                            <div key={index} className="card mb-3" style={{ maxWidth: "540px" }}>
-                                <div className="row g-0">
-                                    <div className="col-md-4">
-                                        <img
-                                            src={item.imageUrl}
-                                            alt={item.name}
-                                            className="img-fluid rounded-start"
-                                        />
-                                    </div>
-                                    <div className="col-md-8">
-                                        <div className="card-body">
-                                            <h5 className="card-title"><b>{item.title}</b></h5>
-                                            
-                                            <p className="card-text"><b>Rs.{item.price}</b></p>
-                                            <div className="py-2">
-                                                <button className="btn btn-dark me-3" onClick={DecreaseQuantity}><b>-</b></button>
-                                                <span className="me-3"><b>{quantity}</b></span>
-                                                <button className="btn btn-dark " onClick={IncreaseQuantity}><b>+</b></button> 
-                                            </div>
-                                            <div className="mt-3">
-                                            <button className="btn btn-dark me-3"><b>Add to wishlist</b></button>
-                                            <button className="btn btn-dark text-white" onClick={() => dispatch(removeFromCart(item.id))}><b>Remove from Cart</b></button>
+                    <div className="row">  
+                        
+                        {/* Cart Items Section */}
+                        <div className="col-md-7">
+                            {cartItems.map((item, index) => (
+                                <div key={index} className="card mb-3" style={{ maxWidth: "540px" }}>
+                                    <div className="row g-0">
+                                        <div className="col-md-4">
+                                            <img
+                                                src={item.imageUrl}
+                                                alt={item.name}
+                                                className="img-fluid rounded-start"
+                                            />
+                                        </div>
+                                        <div className="col-md-8">
+                                            <div className="card-body">
+                                                <h5 className="card-title"><b>{item.title}</b></h5>
+                                                <p className="card-text"><b>Rs.{item.price}</b></p>
+                                                <div className="py-2">
+                                                    <button className="btn btn-dark me-3" onClick={DecreaseQuantity}><b>-</b></button>
+                                                    <span className="me-3"><b>{quantity}</b></span>
+                                                    <button className="btn btn-dark " onClick={IncreaseQuantity}><b>+</b></button> 
+                                                </div>
+                                                <div className="mt-3">
+                                                    <button className="btn btn-dark me-3"><b>Add to wishlist</b></button>
+                                                    <button className="btn btn-dark text-white" onClick={() => dispatch(removeFromCart(item.id))}><b>Remove from Cart</b></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>  
+                            ))}    
+                        </div>
+        
+                       
+                        <div className="col-md-4">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h3>Price Details</h3>
+                                    <p>Total Items: <b>{cartItems.length}</b></p>
+                                    <p>Total Price: <b>Rs. {cartItems.reduce((total, item) => total + item.price * quantity, 0)}</b></p>
+                                    <button className="btn btn-dark "><b>Proceed to Checkout</b></button>
                                 </div>
                             </div>
-                        ))}
+                        </div>
+        
                     </div>
                 )}
-                </div>
-            </main>
-            
+            </div>
+        </main>      
         </div>
     );
 };
