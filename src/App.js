@@ -1,11 +1,39 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 function App() {
+  
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch products from backend
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("https://backend-products-pearl.vercel.app/products"); 
+        const data = await response.json();
+        setProducts(data); 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter products dynamically based on selected category
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
+  
   return (
     <div>
       <Header />
@@ -13,7 +41,9 @@ function App() {
         <div className="container py-3">
           <div className="row gx-3 gy-3">
             <div className="col-md-3">
-              <div className="position-relative">
+              <div className="position-relative"
+               onClick={() =>  navigate(`/category/Men`)}
+               >
                 <img
                   src="https://cdn.shopaccino.com/qarot/products/dsc1005-12759704844383_m.jpg?v=513"
                   alt="image1"
@@ -37,7 +67,9 @@ function App() {
             </div>
 
             <div className="col-md-3">
-              <div className="position-relative">
+              <div className="position-relative"
+              onClick={() =>  navigate(`/category/Women`)}
+              >     
                 <img
                   src="https://mediahub.debenhams.com/bgg09445_black_xl_1?qlt=80&w=213&h=319.5&dpr=2&fit=ctn"
                   alt="image2"
@@ -61,7 +93,8 @@ function App() {
             </div>
 
             <div className="col-md-3">
-              <div className="position-relative">
+              <div className="position-relative"
+              onClick={() =>  navigate(`/category/Kids`)}>
                 <img
                   src="https://angelandrocket.in/cdn/shop/files/AR7031_4.jpg?v=1725007955&width=400"
                   alt="image3"
@@ -85,7 +118,8 @@ function App() {
             </div>
 
             <div className="col-md-3">
-              <div className="position-relative">
+              <div className="position-relative"
+              onClick={() =>  navigate(`/category/Sneakers`)}>
                 <img
                   src="https://images.unsplash.com/photo-1715693754047-4c0b56576495?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D"
                   alt="image4"

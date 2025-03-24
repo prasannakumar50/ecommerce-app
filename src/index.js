@@ -9,6 +9,7 @@ import App from './App';
 import Products from './components/Products';
 import ProductDetails from './components/ProductDetails';
 import CartPage from './components/CartPage';
+import CategoryPage from './components/CategoryPage';
 
 // import reportWebVitals from './reportWebVitals';
 
@@ -28,6 +29,7 @@ root.render(
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/category/:category" element={<CategoryPage />} />
       </Routes>
     </BrowserRouter>
     </Provider>

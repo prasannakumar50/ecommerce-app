@@ -30,7 +30,7 @@ const CartPage = () => {
         <div>
             <Header />
 
-            <main className=" py-4">
+            <main className="bg-light  py-4">
                 <div className="container">
                     <h2 className="text-center mb-4">My Cart</h2>
 
