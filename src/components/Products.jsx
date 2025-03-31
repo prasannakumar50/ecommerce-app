@@ -7,6 +7,7 @@ import ProductCard from "./ProductCard";
 const Products = () => {
   const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([])
 
   const { data, loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
@@ -26,6 +27,30 @@ const Products = () => {
     });
   };
 
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prevCategories) => {
+      if (prevCategories.includes(category)) {
+        return prevCategories.filter((checkedItem) => checkedItem !== category);
+      } else {
+        return [...prevCategories, category];
+      }
+    });
+  };
+
+  // Filter products based on selected categories
+  const filteredProducts =
+  selectedCategories.length > 0
+    ? data?.filter((product) =>
+        product.category.some((cat) => selectedCategories.includes(cat)) // Check if any category in the array is selected
+      )
+    : data;
+
+
+      console.log("Categories from API:", data?.map(p => p.category));
+      console.log("Selected Categories:", selectedCategories);
+
+
   return (
     <div>
       <Header wishlist={wishlist} />
@@ -38,7 +63,7 @@ const Products = () => {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="card-title mb-0">Filters</h5>
                   <h5 className="mb-0">
-                    <a href="#" className="text-decoration-underline text-dark">
+                    <a href="#" className="text-decoration-underline text-dark"  onClick={() => setSelectedCategories([])}>
                       Clear
                     </a>
                   </h5>
@@ -60,13 +85,15 @@ const Products = () => {
                 <div className="mb-4">
                   <h6>Category</h6>
                   <div className="form-check">
-                    {["Men Clothing", "Women", "Kids", "Sneakers"].map(
+                    {["Men", "Women", "Kids", "Sneakers"].map(
                       (category) => (
                         <div key={category}>
                           <input
                             className="form-check-input"
                             type="checkbox"
                             id={category}
+                            checked={selectedCategories.includes(category)}
+                            onChange={() => handleCategoryChange(category)}
                           />
                           <label
                             className="form-check-label"
@@ -143,7 +170,7 @@ const Products = () => {
                 )}
                 {error && <p>Error loading products.</p>}
 
-                {data?.map((product) => (
+                {filteredProducts?.map((product) => (
                   <ProductCard
                     key={product._id}
                     product={product}

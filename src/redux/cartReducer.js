@@ -13,18 +13,18 @@ const cartReducer = (state = initialState, action) => {
         // Create a new array and update quantity immutably
         const updatedCartItems = state.cartItems.map((item, index) =>
           index === existingProductIndex
-            ? { ...item, quantity: item.quantity + 1 } // ✅ New object (Immutable)
+            ? { ...item, quantity: item.quantity + 1 } 
             : item
         );
 
         return {
           ...state,
-          cartItems: updatedCartItems, // ✅ New array, no direct mutation
+          cartItems: updatedCartItems,
         };
       } else {
         return {
           ...state,
-          cartItems: [...state.cartItems, { ...action.payload, quantity: 1 }], // ✅ New object
+          cartItems: [...state.cartItems, { ...action.payload, quantity: 1 }],
         };
       }
 
@@ -39,7 +39,7 @@ const cartReducer = (state = initialState, action) => {
         ...state,
         cartItems: state.cartItems.map((item) =>
           item._id === action.payload._id
-            ? { ...item, quantity: action.payload.quantity } // ✅ New object (Immutable)
+            ? { ...item, quantity: action.payload.quantity } 
             : item
         ),
       };
