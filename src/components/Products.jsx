@@ -42,12 +42,11 @@ const Products = () => {
   const filteredProducts =
   selectedCategories.length > 0
     ? data?.filter((product) =>
-        product.category.some((cat) => selectedCategories.includes(cat)) // Check if any category in the array is selected
+        product.category.some((category) => selectedCategories.includes(category)) 
       )
     : data;
 
-
-      console.log("Categories from API:", data?.map(p => p.category));
+      console.log("Categories from API:", data?.map(item => item.category));
       console.log("Selected Categories:", selectedCategories);
 
 
