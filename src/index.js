@@ -29,7 +29,8 @@ root.render(
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/category/:categoryName" element={<CategoryPage />} />
+        <Route path="/category/:categoryName?" element={<CategoryPage />} />
+
       </Routes>
     </BrowserRouter>
     </Provider>
