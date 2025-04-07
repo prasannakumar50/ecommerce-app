@@ -87,6 +87,20 @@ function CategoryPage() {
                   </a>
                 </h5>
               </div>
+
+              <div className="mb-4">
+                  <h6>Price</h6>
+                  <input
+                    type="range"
+                    className="form-range"
+                    min="100"
+                    max="500"
+                  />
+                  <p>₹100 - ₹500</p>
+                </div>
+
+
+
               <div className="mb-4">
                 <h6>Category</h6>
                 {["Men", "Women", "Kids", "Sneakers"].map((cat) => (
@@ -104,13 +118,64 @@ function CategoryPage() {
                   </div>
                 ))}
               </div>
+             
+              <div className="mb-4">
+                  <h6>Rating</h6>
+                  {[4, 3, 2, 1].map((star) => (
+                    <div className="form-check" key={star}>
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id={`rating-${star}`}
+                        name="rating"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`rating-${star}`}
+                      >
+                        {star} Stars & above
+                      </label>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mb-4">
+                  <h6>Sort by</h6>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="low-to-high"
+                      name="sort"
+                    />
+                    <label className="form-check-label" htmlFor="low-to-high">
+                      Price - Low to High
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="high-to-low"
+                      name="sort"
+                    />
+                    <label className="form-check-label" htmlFor="high-to-low">
+                      Price - High to Low
+                    </label>
+                  </div>
+                </div>
             </div>
           </aside>
 
           <section className="col-md-9">
             <div className="row">
               {loading ? (
-                <h1 className="text-center">Loading...</h1>
+                   <div className="text-center py-3">
+                   <h1 style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3rem" }}>
+                    Loading
+                    <span className="spinner" style={{ marginLeft: "10px" }}></span>
+                  </h1>
+                  </div>
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)
               ) : (
