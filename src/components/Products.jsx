@@ -7,7 +7,8 @@ import ProductCard from "./ProductCard";
 const Products = () => {
   const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [price, setPrice] = useState(1500); // Price range state
 
   const { data, loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
@@ -27,7 +28,6 @@ const Products = () => {
     });
   };
 
-
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
       if (prevCategories.includes(category)) {
@@ -38,17 +38,20 @@ const Products = () => {
     });
   };
 
-  // Filter products based on selected categories
-  const filteredProducts =
-  selectedCategories.length > 0
-    ? data?.filter((product) =>
-        product.category.some((category) => selectedCategories.includes(category)) 
-      )
-    : data;
+  // Step 1: Filter by category
+  const categoryFilteredProducts =
+    selectedCategories.length > 0
+      ? data?.filter((product) =>
+          product.category.some((category) =>
+            selectedCategories.includes(category)
+          )
+        )
+      : data;
 
-      console.log("Categories from API:", data?.map(item => item.category));
-      console.log("Selected Categories:", selectedCategories);
-
+  // Step 2: Filter by price (100 to slider value)
+  const filteredProducts = categoryFilteredProducts?.filter(
+    (product) => product.price >= 100 && product.price <= price
+  );
 
   return (
     <div>
@@ -62,7 +65,11 @@ const Products = () => {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="card-title mb-0">Filters</h5>
                   <h5 className="mb-0">
-                    <a href="#" className="text-decoration-underline text-dark"  onClick={() => setSelectedCategories([])}>
+                    <a
+                      href="#"
+                      className="text-decoration-underline text-dark"
+                      onClick={() => setSelectedCategories([])}
+                    >
                       Clear
                     </a>
                   </h5>
@@ -75,34 +82,38 @@ const Products = () => {
                     type="range"
                     className="form-range"
                     min="100"
-                    max="500"
+                    max="1500"
+                    value={price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
                   />
-                  <p>₹100 - ₹500</p>
+                  <div className="d-flex justify-content-between">
+                    <span>₹100</span>
+                    <span>₹500</span>
+                    <span>₹1500</span>
+                  </div>
                 </div>
 
                 {/* Category Filter */}
                 <div className="mb-4">
                   <h6>Category</h6>
                   <div className="form-check">
-                    {["Men", "Women", "Kids", "Sneakers"].map(
-                      (category) => (
-                        <div key={category}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={category}
-                            checked={selectedCategories.includes(category)}
-                            onChange={() => handleCategoryChange(category)}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={category}
-                          >
-                            {category}
-                          </label>
-                        </div>
-                      )
-                    )}
+                    {["Men", "Women", "Kids", "Sneakers"].map((category) => (
+                      <div key={category}>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id={category}
+                          checked={selectedCategories.includes(category)}
+                          onChange={() => handleCategoryChange(category)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={category}
+                        >
+                          {category}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -161,10 +172,20 @@ const Products = () => {
               <div className="row g-3">
                 {loading && (
                   <div className="text-center py-3">
-                   <h1 style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3rem" }}>
-                    Loading
-                    <span className="spinner" style={{ marginLeft: "10px" }}></span>
-                  </h1>
+                    <h1
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "3rem",
+                      }}
+                    >
+                      Loading
+                      <span
+                        className="spinner"
+                        style={{ marginLeft: "10px" }}
+                      ></span>
+                    </h1>
                   </div>
                 )}
                 {error && <p>Error loading products.</p>}
