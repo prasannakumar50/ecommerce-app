@@ -22,53 +22,53 @@ const Header = ({ wishlist }) => {
             </Link>
 
             {/* Wishlist Icon with Count */}
-            <div style={{ position: "relative" }}>
-              <MdFavoriteBorder
-                style={{
-                  fontSize: "1.5rem",
-                  cursor: "pointer",
-                  marginRight: "1rem",
-                }}
-              />
-              {Array.isArray(wishlist) && wishlist.length > 0 && (
-                <span
-                  className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+            <div style={{ position: "relative", marginRight: "1rem" }}>
+              <Link to="/wishlist">
+                <MdFavoriteBorder
                   style={{
-                    fontSize: "0.8rem",
-                    padding: "2px 6px",
-                    zIndex: 1,
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                    color: "black"
                   }}
-                >
-                  {wishlist.length}
-                </span>
-              )}
+                />
+                {Array.isArray(wishlist) && wishlist.length > 0 && (
+                  <span
+                    className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                    style={{
+                      fontSize: "0.8rem",
+                      padding: "2px 6px",
+                      zIndex: 1,
+                    }}
+                  >
+                    {wishlist.length}
+                  </span>
+                )}
+              </Link>
             </div>
-            
+
             {/* Shopping Cart Icon with Count */}
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", marginRight: "2rem" }}>
               <Link to="/cart">
                 <LuShoppingCart
                   style={{
                     fontSize: "1.5rem",
                     cursor: "pointer",
-                    marginRight: "2rem",
-                    color: "black",
+                    color: "black"
                   }}
                 />
+                {cartCount > 0 && (
+                  <span
+                    className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                    style={{
+                      fontSize: "0.8rem",
+                      padding: "2px 6px",
+                      zIndex: 1,
+                    }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </Link>
-              {cartCount > 0 && (
-                <span
-                  className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-                  style={{
-                    fontSize: "0.8rem",
-                    padding: "2px 6px",
-                    zIndex: 1,
-               
-                  }}
-                >
-                  {cartCount}
-                </span>
-              )}
             </div>
 
             {/* Login Button */}

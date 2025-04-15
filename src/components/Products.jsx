@@ -3,52 +3,66 @@ import Header from "./Header";
 import useFetch from "../useFetch";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
 
 const Products = () => {
   const navigate = useNavigate();
-  const [wishlist, setWishlist] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [price, setPrice] = useState(1500); // Price range state
+  const dispatch = useDispatch();
 
+  // Access wishlist from Redux state
+  const wishlist = useSelector((state) => state.wishlist?.wishlistItems || []);
+
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [price, setPrice] = useState(1500); // Max price from slider
+
+  // Fetch products
   const { data, loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
   );
 
+  // Navigate to product details
   const handleCardClick = (productId) => {
     navigate(`/products/${productId}`);
   };
 
+  // Toggle wishlist
   const handleFavoriteClick = (product) => {
-    setWishlist((prevWishlist) => {
-      if (prevWishlist.some((item) => item._id === product._id)) {
-        return prevWishlist.filter((item) => item._id !== product._id);
-      } else {
-        return [...prevWishlist, product];
-      }
-    });
+    console.log("Favorite clicked for:", product); // ✅ log 1
+  
+    const isFavorited = wishlist.some((item) => item._id === product._id);
+    console.log("Already in wishlist?", isFavorited); // ✅ log 2
+  
+    if (isFavorited) {
+      dispatch(removeFromWishlist(product._id)); // Use _id
+    } else {
+      dispatch(addToWishlist(product)); // Pass the full product object
+    }
   };
+  
+  
 
+  // Category filter
   const handleCategoryChange = (category) => {
-    setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(category)) {
-        return prevCategories.filter((checkedItem) => checkedItem !== category);
-      } else {
-        return [...prevCategories, category];
-      }
-    });
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((item) => item !== category)
+        : [...prevCategories, category]
+    );
   };
 
-  // Step 1: Filter by category
+  // Filter by selected categories
   const categoryFilteredProducts =
     selectedCategories.length > 0
       ? data?.filter((product) =>
-          product.category.some((category) =>
-            selectedCategories.includes(category)
+          product.category.some((cat) =>
+            selectedCategories.includes(cat)
           )
         )
       : data;
 
-  // Step 2: Filter by price (100 to slider value)
+  // Filter by price range
   const filteredProducts = categoryFilteredProducts?.filter(
     (product) => product.price >= 100 && product.price <= price
   );
@@ -56,6 +70,7 @@ const Products = () => {
   return (
     <div>
       <Header wishlist={wishlist} />
+
       <main className="py-4 bg-light">
         <div className="container">
           <div className="row">
@@ -96,25 +111,20 @@ const Products = () => {
                 {/* Category Filter */}
                 <div className="mb-4">
                   <h6>Category</h6>
-                  <div className="form-check">
-                    {["Men", "Women", "Kids", "Sneakers"].map((category) => (
-                      <div key={category}>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id={category}
-                          checked={selectedCategories.includes(category)}
-                          onChange={() => handleCategoryChange(category)}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={category}
-                        >
-                          {category}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
+                  {["Men", "Women", "Kids", "Sneakers"].map((category) => (
+                    <div className="form-check" key={category}>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={category}
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => handleCategoryChange(category)}
+                      />
+                      <label className="form-check-label" htmlFor={category}>
+                        {category}
+                      </label>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Rating Filter */}
@@ -188,6 +198,7 @@ const Products = () => {
                     </h1>
                   </div>
                 )}
+
                 {error && <p>Error loading products.</p>}
 
                 {filteredProducts?.map((product) => (

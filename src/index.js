@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from "./redux/cartReducer"
+import cartReducer from "./redux/cartReducer";
 import './index.css';
 import App from './App';
 import Products from './components/Products';
 import ProductDetails from './components/ProductDetails';
 import CartPage from './components/CartPage';
 import CategoryPage from './components/CategoryPage';
-
-// import reportWebVitals from './reportWebVitals';
+import { WishlistProvider } from './context/WishlistContext'; // Make sure this path is correct
+import WishlistPage from './components/WishlistPage';
 
 const store = configureStore({
   reducer: {
@@ -22,23 +22,19 @@ const store = configureStore({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-     <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/category/:categoryName?" element={<CategoryPage />} />
-
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <WishlistProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/category/:categoryName?" element={<CategoryPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+          </Routes>
+        </BrowserRouter>
+      </WishlistProvider>
     </Provider>
-
   </React.StrictMode>
 );
-
-// // If you want to start measuring performance in your app, pass a function
-// // to log results (for example: reportWebVitals(console.log))
-// // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();

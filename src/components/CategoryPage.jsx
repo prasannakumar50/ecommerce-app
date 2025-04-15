@@ -96,7 +96,11 @@ function CategoryPage() {
                     min="100"
                     max="500"
                   />
-                  <p>₹100 - ₹500</p>
+                    <div className="d-flex justify-content-between">
+                    <span>₹100</span>
+                    <span>₹500</span>
+                    <span>₹1500</span>
+                  </div>
                 </div>
 
 
