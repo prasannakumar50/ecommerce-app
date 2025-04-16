@@ -91,7 +91,7 @@ const ProductDetails = () => {
         <b>Availability</b>: {data.availability}
       </p>
       <p>
-        <b>Size</b>: {data.size.join(", ")}
+      <b>Size</b>: {data.size.join(", ")}
       </p>
       <p>
         <b>Delivery Time</b>: {data.deliveryTime}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import useFetch from "../useFetch";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,7 @@ const Products = () => {
   const dispatch = useDispatch();
 
   // Access wishlist from Redux state
-  const wishlist = useSelector((state) => state.wishlist?.wishlistItems || []);
-
+  const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [price, setPrice] = useState(1500); // Max price from slider
@@ -27,19 +26,29 @@ const Products = () => {
     navigate(`/products/${productId}`);
   };
 
-  // Toggle wishlist
   const handleFavoriteClick = (product) => {
-    console.log("Favorite clicked for:", product); // ✅ log 1
+    console.log("Favorite icon clicked for:", product.title); // Check if this logs on click
   
-    const isFavorited = wishlist.some((item) => item._id === product._id);
-    console.log("Already in wishlist?", isFavorited); // ✅ log 2
+    const alreadyInWishlist = wishlistItems.some(
+      (item) => item._id === product._id
+    );
+    console.log("In the wishlist?", alreadyInWishlist);
   
-    if (isFavorited) {
-      dispatch(removeFromWishlist(product._id)); // Use _id
+    if (alreadyInWishlist) {
+      dispatch(removeFromWishlist(product._id));
+      console.log("Removed from wishlist:", product.title);
     } else {
-      dispatch(addToWishlist(product)); // Pass the full product object
+      dispatch(addToWishlist(product));
+      console.log("Added to wishlist:", product.title);
     }
+  
+    console.log("Current wishlist:", wishlistItems);
   };
+  
+
+  useEffect(() => {
+    console.log(" Updated wishlistItems:", wishlistItems);
+  }, [wishlistItems]);
   
   
 
@@ -69,7 +78,7 @@ const Products = () => {
 
   return (
     <div>
-      <Header wishlist={wishlist} />
+      <Header wishlist={wishlistItems} />
 
       <main className="py-4 bg-light">
         <div className="container">
@@ -205,7 +214,7 @@ const Products = () => {
                   <ProductCard
                     key={product._id}
                     product={product}
-                    isInWishlist={wishlist.some(
+                    isInWishlist={wishlistItems.some(
                       (item) => item._id === product._id
                     )}
                     handleCardClick={handleCardClick}

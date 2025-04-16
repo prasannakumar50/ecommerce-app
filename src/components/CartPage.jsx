@@ -28,7 +28,7 @@ const CartPage = () => {
 
     return (
         <div>
-            <Header />
+            <Header  />
 
             <main className="bg-light  py-4">
                 <div className="container">
