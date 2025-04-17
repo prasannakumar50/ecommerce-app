@@ -1,8 +1,13 @@
 import { useParams } from "react-router-dom";
 import useFetch from "../useFetch";
 import Header from "./Header";
+import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
+import { addToCart } from "../redux/cartReducer";
+import { useDispatch } from "react-redux";
 
 const ProductDetails = () => {
+  const dispatch = useDispatch();
+
   const { id } = useParams();
   console.log("Product ID:", id);
 
@@ -104,6 +109,7 @@ const ProductDetails = () => {
         }}
       >
         <button
+         onClick={() => dispatch(addToCart(data))}
           style={{
             flex: 1, 
             padding: "10px",
@@ -118,6 +124,7 @@ const ProductDetails = () => {
           Add to Cart
         </button>
         <button
+          onClick={() => dispatch(addToWishlist(data))}
           style={{
             flex: 1, 
             padding: "10px",

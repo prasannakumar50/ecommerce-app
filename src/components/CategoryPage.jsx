@@ -13,7 +13,7 @@ function CategoryPage() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const wishlistItems = useSelector((state) => state.wishlist.items || []); // Default to empty array if undefined
+  const wishlistItems = useSelector((state) => state.wishlist.items || []);  // Default to empty array if undefined
 
 
   const selectedCategories = searchParams.get("category")
@@ -104,16 +104,14 @@ function CategoryPage() {
 
 
   const handleFavoriteClick = (product) => {
-    const alreadyInWishlist = wishlistItems.some(
-      (item) => item._id === product._id
-    );
-
-    if (alreadyInWishlist) {
+    const isInWishlist = wishlistItems.some((item) => item._id === product._id);
+    if (isInWishlist) {
       dispatch(removeFromWishlist(product._id));
     } else {
       dispatch(addToWishlist(product));
     }
   };
+
 
   return (
     <main>
@@ -226,9 +224,9 @@ function CategoryPage() {
                 filteredProducts.map((product) =><ProductCard
                 key={product._id}
                 product={product}
-                isInWishlist={wishlistItems.some(
-                  (item) => item._id === product._id
-                )}
+                isInWishlist={wishlistItems.some((item) => item._id === product._id)}
+
+                
                 handleCardClick={() => navigate(`/products/${product._id}`)}
                 handleFavoriteClick={handleFavoriteClick}
               />)
