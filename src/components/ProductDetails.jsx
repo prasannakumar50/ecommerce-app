@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
 import useFetch from "../useFetch";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./Header";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
 import { addToCart } from "../redux/cartReducer";
@@ -109,7 +112,9 @@ const ProductDetails = () => {
         }}
       >
         <button
-         onClick={() => dispatch(addToCart(data))}
+         onClick={() => {dispatch(addToCart(data))
+          toast.success(`Product added to cart!`);
+         }}
           style={{
             flex: 1, 
             padding: "10px",
@@ -124,7 +129,9 @@ const ProductDetails = () => {
           Add to Cart
         </button>
         <button
-          onClick={() => dispatch(addToWishlist(data))}
+          onClick={() => {dispatch(addToWishlist(data))
+            toast.success(`Product added to wishlist!`);
+          }}
           style={{
             flex: 1, 
             padding: "10px",
@@ -152,6 +159,10 @@ const ProductDetails = () => {
       </main>
 
       <></>
+      <ToastContainer position="top-right" autoClose={2000}
+      toastStyle={{ backgroundColor: '#000', color: '#fff', borderRadius: '8px' }}
+      bodyStyle={{ color: '#fff' }}
+       />
     </div>
   );
 };

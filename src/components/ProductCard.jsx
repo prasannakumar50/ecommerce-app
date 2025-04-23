@@ -2,7 +2,7 @@ import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartReducer";
 
-const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteClick }) => {
+const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteClick, handleAddToCart }) => {
   const dispatch = useDispatch();
 
   return (
@@ -19,7 +19,7 @@ const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteCli
             src={product.imageUrl}
             className="card-img-top"
             alt={product.title}
-            style={{ height: "260px", objectFit: "cover" }}
+            style={{ height: "260px", objectFit: "cover", }}
           />
           <div
             className="favorite-icon"
@@ -58,8 +58,9 @@ const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteCli
           <button
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(addToCart(product));
+              handleAddToCart(product);
             }}
+            
             className="btn btn-dark mt-2"
           >
             <b>Add to Cart</b>

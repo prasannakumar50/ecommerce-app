@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./Header";
 import { useDispatch, useSelector } from "react-redux";
 import {  } from "../redux/cartReducer";
+import { addToWishlist } from "../redux/wishlistReducer";
 
 const CartPage = () => {
     const dispatch = useDispatch();
@@ -70,7 +74,11 @@ const CartPage = () => {
                                                         </button>
                                                     </div>
                                                     <div className="mt-3">
-                                                        <button className="btn btn-dark me-3"><b>Add to wishlist</b></button>
+                                                        <button className="btn btn-dark me-2"  onClick={() => {
+                                                         dispatch(addToWishlist(item));
+                                                         dispatch({ type: "REMOVE_FROM_CART", payload: item._id })
+                                                         toast.success("Product moved to Wishlist!");
+                                                         }} ><b>Move to Wishlist</b></button>
                                                         <button
                                                             className="btn btn-dark text-white"
                                                             onClick={() => dispatch({ type: "REMOVE_FROM_CART", payload: item._id })}
@@ -105,6 +113,13 @@ const CartPage = () => {
                     )}
                 </div>
             </main>
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              toastStyle={{ backgroundColor: "#000", color: "#fff", borderRadius: "8px" }}
+              bodyStyle={{ color: "#fff" }}
+             />
+
         </div>
     );
 };
