@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
@@ -14,6 +15,11 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const wishlistItems = useSelector((state) => {
+    console.log("Redux State in WishlistPage:", state);
+    return state.wishlist?.wishlistItems || [];
+  });
 
   // Fetch products from backend
   useEffect(() => {
@@ -79,7 +85,7 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header  wishlist={wishlistItems}/>
       <main className="bg-light py-4">
         <div className="container py-3">
 {/* Category Cards */}

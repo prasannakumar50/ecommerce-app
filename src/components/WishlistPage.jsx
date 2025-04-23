@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer"; 
+import { addToCart } from "../redux/cartReducer";
 import Header from "./Header";
 import ProductCard from "./ProductCard";
 
@@ -18,6 +19,11 @@ const WishlistPage = () => {
   const handleAddToWishlist = (product) => {
     dispatch(addToWishlist(product));
   };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+  
 
   return (
     <div>
@@ -38,6 +44,7 @@ const WishlistPage = () => {
                     handleRemoveFromWishlist(product._id)
                   }
                   handleCardClick={() => {}}
+                  handleAddToCart={() => handleAddToCart(product)}
                 />
               ))}
             </div>

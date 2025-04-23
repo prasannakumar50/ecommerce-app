@@ -10,6 +10,10 @@ import { addToWishlist } from "../redux/wishlistReducer";
 const CartPage = () => {
     const dispatch = useDispatch();
     const cartItems = useSelector((state) => state.cart.cartItems);
+    const wishlistItems = useSelector((state) => {
+        console.log("Redux State in WishlistPage:", state);
+        return state.wishlist?.wishlistItems || [];
+      });
 
     // Store quantity as an object where key is item ID
     const [quantities, setQuantities] = useState({});
@@ -32,7 +36,7 @@ const CartPage = () => {
 
     return (
         <div>
-            <Header  />
+            <Header wishlist={wishlistItems}  />
 
             <main className="bg-light  py-4">
                 <div className="container">
@@ -81,7 +85,10 @@ const CartPage = () => {
                                                          }} ><b>Move to Wishlist</b></button>
                                                         <button
                                                             className="btn btn-dark text-white"
-                                                            onClick={() => dispatch({ type: "REMOVE_FROM_CART", payload: item._id })}
+                                                            onClick={() => {
+                                                                dispatch({ type: "REMOVE_FROM_CART", payload: item._id })
+                                                                toast.warning("Product removed to Cart!");
+                                                        }}
                                                         >
                                                             <b>Remove from Cart</b>
                                                         </button>
