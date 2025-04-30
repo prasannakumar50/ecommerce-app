@@ -1,6 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer"; 
 import { addToCart } from "../redux/cartReducer";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./Header";
 import ProductCard from "./ProductCard";
 
@@ -14,6 +17,10 @@ const WishlistPage = () => {
 
   const handleRemoveFromWishlist = (productId) => {
     dispatch(removeFromWishlist(productId));
+    
+    toast.warning(` Product removed from wishlist`,{
+                  style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+    });
   };
 
   const handleAddToWishlist = (product) => {
@@ -22,6 +29,9 @@ const WishlistPage = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
+     toast.success(` Product added to Cart`,{
+                   style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+     });
   };
   
 
@@ -51,6 +61,12 @@ const WishlistPage = () => {
           )}
         </div>
       </main>
+      <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              toastStyle={{ backgroundColor: "#000", color: "#fff", borderRadius: "8px" }}
+              bodyStyle={{ color: "#fff" }}
+      />
     </div>
   );
 };

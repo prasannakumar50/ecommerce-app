@@ -18,10 +18,20 @@ const Products = () => {
   const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [price, setPrice] = useState(1500);
+  const [search, setSearch] = useState("");
 
-  const { data, loading, error } = useFetch(
+
+
+  const { data =[], loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
   );
+
+
+  
+ 
+
+
+
 
   const handleCardClick = (productId) => {
     navigate(`/products/${productId}`);
@@ -31,7 +41,6 @@ const Products = () => {
     const alreadyInWishlist = wishlistItems.some(
       (item) => item._id === product._id
     );
-
     if (alreadyInWishlist) {
       dispatch(removeFromWishlist(product._id));
       toast.warning(` Product removed from wishlist`,{
@@ -73,14 +82,36 @@ const Products = () => {
           )
         )
       : data;
+      console.log("Category filtered products:", categoryFilteredProducts);
+  
+
+
 
   const filteredProducts = categoryFilteredProducts?.filter(
     (product) => product.price >= 100 && product.price <= price
   );
+  console.log("Titles:", filteredProducts.map(p => p.title));
+
+  const finalFilteredProducts = filteredProducts.filter((p) => {
+    const q = search.toLowerCase();
+    return (
+      p.title.toLowerCase().includes(q) ||
+      (p.tags || []).some((t) => t.toLowerCase().includes(q))
+    );
+  });
+  
+
+  console.log("Final filtered products:", finalFilteredProducts);
+  console.log("Search term:", search);
+  console.log("Matching products:", finalFilteredProducts.map(p => p.title));
+
+
+
+
 
   return (
     <div>
-      <Header wishlist={wishlistItems} />
+      <Header wishlist={wishlistItems} search={search} setSearch={setSearch}/>
 
       <main className="py-4 bg-light">
         <div className="container">
@@ -199,7 +230,7 @@ const Products = () => {
 
                 {error && <p>Error loading products.</p>}
 
-                {filteredProducts?.map((product) => (
+                {finalFilteredProducts?.map((product) => (
                   <ProductCard
                     key={product._id}
                     product={product}
@@ -218,11 +249,11 @@ const Products = () => {
       </main>
 
       <ToastContainer
-  position="top-right"
-  autoClose={2000}
-  toastStyle={{ backgroundColor: '#000', color: '#fff', borderRadius: '8px' }}
-  bodyStyle={{ color: '#fff' }}
-/> 
+        position="top-right"
+        autoClose={2000}
+        toastStyle={{ backgroundColor: '#000', color: '#fff', borderRadius: '8px' }}
+        bodyStyle={{ color: '#fff' }}
+      /> 
     </div>
   );
 };

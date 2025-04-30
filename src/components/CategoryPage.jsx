@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./Header";
 import { useDispatch, useSelector } from "react-redux";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
+import { addToCart } from "../redux/cartReducer";
 
 function CategoryPage() {
   const { categoryName } = useParams();
@@ -107,15 +111,29 @@ function CategoryPage() {
     const isInWishlist = wishlistItems.some((item) => item._id === product._id);
     if (isInWishlist) {
       dispatch(removeFromWishlist(product._id));
+       toast.warning(` Product removed from wishlist`,{
+               style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+             });
     } else {
       dispatch(addToWishlist(product));
+       toast.success(` Product added to wishlist`, {
+              style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+            });
     }
   };
 
+   const handleAddToCart = (product) => {
+      dispatch(addToCart(product));
+      toast.success(` Product added to Cart`, {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+    };
+
 
   return (
-    <main>
+    <div>
       <Header wishlist={wishlistItems} />
+    <main> 
       <div className="container mt-4">
         <div className="row">
           <aside className="col-md-3">
@@ -229,6 +247,7 @@ function CategoryPage() {
                 
                 handleCardClick={() => navigate(`/products/${product._id}`)}
                 handleFavoriteClick={handleFavoriteClick}
+                handleAddToCart={() => handleAddToCart(product)}
               />)
               ) : (
                 <p className="text-center">No products found.</p>
@@ -238,6 +257,14 @@ function CategoryPage() {
         </div>
       </div>
     </main>
+    <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              toastStyle={{ backgroundColor: "#000", color: "#fff", borderRadius: "8px" }}
+              bodyStyle={{ color: "#fff" }}
+     />
+    </div>
+    
   );
 }
 

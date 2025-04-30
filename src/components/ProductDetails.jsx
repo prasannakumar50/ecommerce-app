@@ -6,10 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
 import { addToCart } from "../redux/cartReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
+
+  const wishlistItems = useSelector((state) => {
+    console.log("Redux State in WishlistPage:", state);
+    return state.wishlist?.wishlistItems || [];
+  });
 
   const { id } = useParams();
   console.log("Product ID:", id);
@@ -21,7 +26,7 @@ const ProductDetails = () => {
 
   return (
     <div className=" ">
-      <Header />
+      <Header  wishlist={wishlistItems} />
       <main className="container py-2">
         {loading ? (
            <div className="text-center py-3">

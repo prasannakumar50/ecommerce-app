@@ -1,17 +1,63 @@
 import { MdFavoriteBorder } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";  
+import { CiSearch } from "react-icons/ci";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux"; 
+import { useState } from "react"; 
 
-const Header = ({ wishlist }) => {
-  const cartItems = useSelector((state) => state.cart.cartItems); // Get cart items from Redux
+const Header = ({ wishlist, search, setSearch }) => {
+  const location = useLocation();
+  const cartItems = useSelector((state) => state.cart.cartItems); 
   const cartCount = cartItems.length;
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearch(query);
+  };
+
+  // Check if the current route is the home page
+  const isHomePage = location.pathname === '/';
 
   return (
     <header className="py-2">
       <nav>
         <div className="container d-flex justify-content-between align-items-center py-2 text-dark">
           <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
+
+          {/* Conditionally render the search bar */}
+          {!isHomePage && (
+            <div
+              className="input-with-icon mx-auto"
+              style={{
+                position: "relative",
+                width: "100%",
+                maxWidth: "260px",
+              }}
+            >
+              <CiSearch
+                style={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#a0a0a0",
+                  fontSize: "20px",
+                }}
+              />
+              <input
+                type="text"
+                className="form-control"
+                value={search} 
+                placeholder="Search"
+                onChange={e => setSearch(e.target.value)} 
+                style={{
+                  paddingLeft: "40px",
+                  backgroundColor: "white",
+                }}
+              />
+            </div>
+          )}
+          
           <div className="d-flex align-items-center">
             <Link
               to="/products"  
@@ -71,13 +117,16 @@ const Header = ({ wishlist }) => {
               </Link>
             </div>
 
-            {/* Login Button */}
-            <button className="btn btn-dark"><b>Login</b></button>
+           
+          <Link to="/login">
+          <button className="btn btn-dark"><b>Login</b></button>
+          </Link>
           </div>
         </div>
       </nav>
     </header>
   );
 };
+
 
 export default Header;
