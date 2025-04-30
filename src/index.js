@@ -13,6 +13,7 @@ import CartPage from './components/CartPage';
 import CategoryPage from './components/CategoryPage';
 import WishlistPage from './components/WishlistPage';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
 
 const store = configureStore({
   reducer: {
@@ -35,6 +36,7 @@ root.render(
             <Route path="/category/:categoryName?" element={<CategoryPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </BrowserRouter>
       

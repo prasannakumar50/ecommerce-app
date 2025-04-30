@@ -1,6 +1,10 @@
+
+
+
+
 import { Link } from "react-router-dom";
 import Header from "./Header";
-const Login = () => {
+const SignUp = () => {
   return (
     <div>
       <Header />
@@ -10,8 +14,16 @@ const Login = () => {
             <div className="col-lg-6 col-md-8 col-sm-12">
               <div className="card shadow-sm rounded-3">
                 <div className="card-body">
-                  <h2 className="text-center mb-3">Sign In</h2>
+                  <h2 className="text-center mb-3">Sign Up</h2>
                   <form>
+                    <label htmlFor="nameInput" className="form-label">Enter your name:</label>
+                    <input
+                      type="text"
+                      id="nameInput"
+                      className="form-control"
+                      placeholder="Enter your name"
+                    />
+                    <br />
                     <label htmlFor="emailInput" className="form-label">Email Address:</label>
                     <input
                       type="email"
@@ -28,11 +40,11 @@ const Login = () => {
                       placeholder="Enter your password"
                     /><br />
                     <div className="d-grid gap-2">
-                    <button type="submit" className="btn btn-dark text-white">Sign In</button>
+                    <button type="submit" className="btn btn-dark text-white">Sign Up</button>
                     </div>
                   </form>
                   <p className="text-center mt-3">
-                    Don’t have an account? <Link to="/signup">Sign Up</Link>
+                     Already have an account?  <Link to="/login">Sign In</Link>
                   </p>
                 </div>
               </div>
@@ -44,4 +56,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
+
+
+

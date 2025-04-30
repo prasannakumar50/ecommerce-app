@@ -1,6 +1,7 @@
 import { MdFavoriteBorder } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
+import { FaUserCircle } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux"; 
 import { useState } from "react"; 
@@ -24,7 +25,7 @@ const Header = ({ wishlist, search, setSearch }) => {
         <div className="container d-flex justify-content-between align-items-center py-2 text-dark">
           <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
 
-          {/* Conditionally render the search bar */}
+          
           {!isHomePage && (
             <div
               className="input-with-icon mx-auto"
@@ -58,70 +59,74 @@ const Header = ({ wishlist, search, setSearch }) => {
             </div>
           )}
           
-          <div className="d-flex align-items-center">
-            <Link
-              to="/products"  
-              className="text-decoration-none text-dark fw-bold me-4"
-              style={{ fontSize: "1rem", cursor: "pointer" }}
-            >
-              Products
-            </Link>
+         <div className="d-flex align-items-center gap-4">
+  <Link
+    to="/products"  
+    className="text-decoration-none text-dark fw-bold"
+    style={{ fontSize: "1rem", cursor: "pointer" }}
+  >
+    Products
+  </Link>
 
-            {/* Wishlist Icon with Count */}
-            <div style={{ position: "relative", marginRight: "1rem" }}>
-              <Link to="/wishlist">
-                <MdFavoriteBorder
-                  style={{
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    color: "black"
-                  }}
-                />
-                {Array.isArray(wishlist) && wishlist.length > 0 && (
-                  <span
-                    className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-                    style={{
-                      fontSize: "0.8rem",
-                      padding: "2px 6px",
-                      zIndex: 1,
-                    }}
-                  >
-                    {wishlist.length}
-                  </span>
-                )}
-              </Link>
-            </div>
+  {/* Wishlist Icon with Count */}
+  <div className="position-relative">
+    <Link to="/wishlist">
+      <MdFavoriteBorder
+        style={{
+          fontSize: "1.5rem",
+          cursor: "pointer",
+          color: "black"
+        }}
+      />
+      {Array.isArray(wishlist) && wishlist.length > 0 && (
+        <span
+          className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+          style={{
+            fontSize: "0.8rem",
+            padding: "2px 6px",
+            zIndex: 1,
+            left: "60%"
+          }}
+        >
+          {wishlist.length}
+        </span>
+      )}
+    </Link>
+  </div>
 
-            {/* Shopping Cart Icon with Count */}
-            <div style={{ position: "relative", marginRight: "2rem" }}>
-              <Link to="/cart">
-                <LuShoppingCart
-                  style={{
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    color: "black"
-                  }}
-                />
-                {cartCount > 0 && (
-                  <span
-                    className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-                    style={{
-                      fontSize: "0.8rem",
-                      padding: "2px 6px",
-                      zIndex: 1,
-                    }}
-                  >
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-            </div>
+  {/* Shopping Cart Icon with Count */}
+  <div className="position-relative">
+    <Link to="/cart">
+      <LuShoppingCart
+        style={{
+          fontSize: "1.5rem",
+          cursor: "pointer",
+          color: "black"
+        }}
+      />
+      {cartCount > 0 && (
+        <span
+          className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+          style={{
+            fontSize: "0.8rem",
+            padding: "2px 6px",
+            zIndex: 1,
+          }}
+        >
+          {cartCount}
+        </span>
+      )}
+    </Link>
+  </div>
 
-           
-          <Link to="/login">
-          <button className="btn btn-dark"><b>Login</b></button>
-          </Link>
-          </div>
+  {/* User Icon */}
+  <div className="position-relative">
+    <Link to="/login" style={{ color: "black" }}>
+      <FaUserCircle style={{ fontSize: "1.7rem", cursor: "pointer" }} />
+    </Link>
+  </div>
+</div>
+
         </div>
       </nav>
     </header>
