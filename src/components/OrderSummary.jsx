@@ -57,7 +57,7 @@ const OrderSummary = () => {
           <hr />
           <h5 className="mb-3 text-center">Price Details</h5>
           <div className="px-2">
-            <p>Total MRP ({totalItems} item{totalItems > 1 ? 's' : ''}): <b>Rs. {totalMRP}</b></p>
+            <p>Total Price ({totalItems} item{totalItems > 1 ? 's' : ''}): <b>Rs. {totalMRP}</b></p>
             <p>Discount on MRP: Rs. -{discount}</p>
             <p>Delivery Charges: FREE</p>
             <hr />
