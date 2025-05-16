@@ -12,13 +12,17 @@ const OrderSuccessfull = () => {
   return (
     <div>
       <Header />
-      <div className="container text-center mt-5 p-4 shadow rounded" style={{ maxWidth: "500px" }}>
+      <main className="bg-light py-4 ">
+       
+       <div className="container text-center mt-5 p-4 shadow rounded mb-5" style={{ maxWidth: "500px" }}>
         <h2 className="text-success mb-4">🎉 Order Placed Successfully!</h2>
         <p className="mb-4">Thank you for your purchase. Your items will be delivered soon.</p>
         <button className="btn btn-dark" onClick={handleGoHome}>
           Continue Shopping
         </button>
-      </div>
+       </div>
+       
+      </main>
     </div>
   );
 };

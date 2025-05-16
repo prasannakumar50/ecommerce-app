@@ -62,7 +62,7 @@ const ShippingAddress = () => {
       country: "",
     });
     setShowForm(false);
-    setSelectedIndex(addresses.length); // select the new one
+    setSelectedIndex(addresses.length); 
   };
 
   const handleNext = () => {
