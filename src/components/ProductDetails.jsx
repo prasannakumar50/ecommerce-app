@@ -12,17 +12,17 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => {
-    console.log("Redux State in WishlistPage:", state);
+    //console.log("Redux State in WishlistPage:", state);
     return state.wishlist?.wishlistItems || [];
   });
 
   const { id } = useParams();
-  console.log("Product ID:", id);
+  //console.log("Product ID:", id);
 
   const { data, loading, error } = useFetch(
     `https://backend-products-pearl.vercel.app/products/${id}`
   );
-  console.log(data);
+  //console.log(data);
 
   return (
     <div className=" ">

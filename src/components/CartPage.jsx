@@ -1,24 +1,20 @@
+// CartPage.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ import navigate
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Header from "./Header";
 import { useDispatch, useSelector } from "react-redux";
-import {  } from "../redux/cartReducer";
 import { addToWishlist } from "../redux/wishlistReducer";
 
 const CartPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate(); // ✅ init navigate
     const cartItems = useSelector((state) => state.cart.cartItems);
-    const wishlistItems = useSelector((state) => {
-        console.log("Redux State in WishlistPage:", state);
-        return state.wishlist?.wishlistItems || [];
-      });
-
-    // Store quantity as an object where key is item ID
+    const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
     const [quantities, setQuantities] = useState({});
 
-    // Increase Quantity
     const IncreaseQuantity = (id) => {
         setQuantities((prev) => ({
             ...prev,
@@ -26,7 +22,6 @@ const CartPage = () => {
         }));
     };
 
-    // Decrease Quantity
     const DecreaseQuantity = (id) => {
         setQuantities((prev) => ({
             ...prev,
@@ -34,11 +29,20 @@ const CartPage = () => {
         }));
     };
 
+    const handleProceedToCheckout = () => {
+       navigate("/shipping-address", {
+        state: {
+            cartItems,
+            quantities,
+          },
+        });
+    };
+
     return (
         <div>
-            <Header wishlist={wishlistItems}  />
+            <Header wishlist={wishlistItems} />
 
-            <main className="bg-light  py-4">
+            <main className="bg-light py-4">
                 <div className="container">
                     <h2 className="text-center mb-4">My Cart</h2>
 
@@ -46,7 +50,6 @@ const CartPage = () => {
                         <p className="text-center">Your cart is empty.</p>
                     ) : (
                         <div className="row">
-                            {/* Cart Items Section */}
                             <div className="col-md-7">
                                 {cartItems.map((item) => (
                                     <div key={item._id} className="card mb-3" style={{ maxWidth: "540px" }}>
@@ -78,18 +81,17 @@ const CartPage = () => {
                                                         </button>
                                                     </div>
                                                     <div className="mt-3">
-                                                        <button className="btn btn-dark me-2"  onClick={() => {
-                                                         dispatch(addToWishlist(item));
-                                                         dispatch({ type: "REMOVE_FROM_CART", payload: item._id })
-                                                         toast.success("Product moved to Wishlist!");
-                                                         }} ><b>Move to Wishlist</b></button>
-                                                        <button
-                                                            className="btn btn-dark text-white"
-                                                            onClick={() => {
-                                                                dispatch({ type: "REMOVE_FROM_CART", payload: item._id })
-                                                                toast.warning("Product removed to Cart!");
-                                                        }}
-                                                        >
+                                                        <button className="btn btn-dark me-2" onClick={() => {
+                                                            dispatch(addToWishlist(item));
+                                                            dispatch({ type: "REMOVE_FROM_CART", payload: item._id });
+                                                            toast.success("Product moved to Wishlist!");
+                                                        }}>
+                                                            <b>Move to Wishlist</b>
+                                                        </button>
+                                                        <button className="btn btn-dark text-white" onClick={() => {
+                                                            dispatch({ type: "REMOVE_FROM_CART", payload: item._id });
+                                                            toast.warning("Product removed from Cart!");
+                                                        }}>
                                                             <b>Remove from Cart</b>
                                                         </button>
                                                     </div>
@@ -106,13 +108,13 @@ const CartPage = () => {
                                     <div className="card-body">
                                         <h3>Price Details</h3>
                                         <p>Total Items: {cartItems.length}</p>
-                                        <p>Discount Amount: <b></b></p>
-                                        <p><b>Total Price:  
-                                                 Rs. {cartItems.reduce((total, item) => 
-                                                    total + item.price * (quantities[item._id] || 1), 0)}
-                                            </b>
-                                        </p>
-                                        <button className="btn btn-dark"><b>Proceed to Checkout</b></button>
+                                        <p><b>Total Price:
+                                            Rs. {cartItems.reduce((total, item) =>
+                                                total + item.price * (quantities[item._id] || 1), 0)}
+                                        </b></p>
+                                        <button className="btn btn-dark" onClick={handleProceedToCheckout}>
+                                            <b>Proceed to Checkout</b>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -121,12 +123,11 @@ const CartPage = () => {
                 </div>
             </main>
             <ToastContainer
-              position="top-right"
-              autoClose={2000}
-              toastStyle={{ backgroundColor: "#000", color: "#fff", borderRadius: "8px" }}
-              bodyStyle={{ color: "#fff" }}
-             />
-
+                position="top-right"
+                autoClose={2000}
+                toastStyle={{ backgroundColor: "#000", color: "#fff", borderRadius: "8px" }}
+                bodyStyle={{ color: "#fff" }}
+            />
         </div>
     );
 };

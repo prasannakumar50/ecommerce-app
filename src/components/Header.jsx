@@ -85,7 +85,7 @@ const Header = ({ wishlist, search, setSearch }) => {
             fontSize: "0.8rem",
             padding: "2px 6px",
             zIndex: 1,
-            left: "60%"
+            
           }}
         >
           {wishlist.length}

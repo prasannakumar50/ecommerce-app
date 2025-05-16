@@ -82,7 +82,7 @@ const Products = () => {
           )
         )
       : data;
-      console.log("Category filtered products:", categoryFilteredProducts);
+      //console.log("Category filtered products:", categoryFilteredProducts);
   
 
 
@@ -90,7 +90,7 @@ const Products = () => {
   const filteredProducts = categoryFilteredProducts?.filter(
     (product) => product.price >= 100 && product.price <= price
   );
-  console.log("Titles:", filteredProducts.map(p => p.title));
+  //console.log("Titles:", filteredProducts.map(p => p.title));
 
   const finalFilteredProducts = filteredProducts.filter((p) => {
     const q = search.toLowerCase();
@@ -101,9 +101,9 @@ const Products = () => {
   });
   
 
-  console.log("Final filtered products:", finalFilteredProducts);
-  console.log("Search term:", search);
-  console.log("Matching products:", finalFilteredProducts.map(p => p.title));
+  //console.log("Final filtered products:", finalFilteredProducts);
+  //console.log("Search term:", search);
+  //console.log("Matching products:", finalFilteredProducts.map(p => p.title));
 
 
 

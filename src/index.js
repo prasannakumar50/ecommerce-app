@@ -14,11 +14,19 @@ import CategoryPage from './components/CategoryPage';
 import WishlistPage from './components/WishlistPage';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
+import loginRegisterReducer from './redux/loginRegisterSlice';
+import Address from './components/Address';
+import ShippingAddress from './components/ShippingAddress';
+import OrderSummary from './components/OrderSummary';
+import OrderSuccessfull from './components/OrderSuccessfull';
+
 
 const store = configureStore({
   reducer: {
     cart: cartReducer,
-    wishlist: wishlistReducer
+    wishlist: wishlistReducer,
+    auth: loginRegisterReducer,
+    
   },
 });
 
@@ -37,6 +45,11 @@ root.render(
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/address" element={<Address />} />
+            <Route path="/shipping-address" element={<ShippingAddress />} />
+            <Route path="/order-summary" element={<OrderSummary />} />
+            <Route path="/order-successful" element={<OrderSuccessfull />} />
+
           </Routes>
         </BrowserRouter>
       
