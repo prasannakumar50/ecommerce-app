@@ -45,6 +45,7 @@ const initialState = {
   status: "idle",
   error: null,
   addresses: [],
+  deferredCartItem: null, // NEW: to hold item added before login
 };
 
 // Create slice
@@ -65,7 +66,7 @@ const loginRegisterSlice = createSlice({
     },
     addAddress: (state, action) => {
       state.addresses.push(action.payload);
-   },
+    },
     updateAddress: (state, action) => {
       const index = state.addresses.findIndex((a) => a.id === action.payload.id);
       if (index !== -1) {
@@ -75,12 +76,21 @@ const loginRegisterSlice = createSlice({
     removeAddress: (state, action) => {
       state.addresses = state.addresses.filter((a) => a.id !== action.payload);
     },
+
+    // New reducers to handle deferred cart item
+    setDeferredCartItem: (state, action) => {
+      state.deferredCartItem = action.payload;
+    },
+    clearDeferredCartItem: (state) => {
+      state.deferredCartItem = null;
+    },
   },
   extraReducers: (builder) => {
     builder
       // Login
       .addCase(generateToken.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(generateToken.fulfilled, (state, action) => {
         const { token, name, email } = action.payload;
@@ -88,6 +98,7 @@ const loginRegisterSlice = createSlice({
         state.token = token;
         state.name = name;
         state.email = email;
+        state.error = null;
         localStorage.setItem("admin-token", token);
       })
       .addCase(generateToken.rejected, (state, action) => {
@@ -98,9 +109,11 @@ const loginRegisterSlice = createSlice({
       // Signup
       .addCase(signUpUser.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(signUpUser.fulfilled, (state) => {
         state.status = "success";
+        state.error = null;
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.status = "failed";
@@ -117,6 +130,8 @@ export const {
   addAddress,
   updateAddress,
   removeAddress,
+  setDeferredCartItem,   // New
+  clearDeferredCartItem, // New
 } = loginRegisterSlice.actions;
 
 // Export reducer

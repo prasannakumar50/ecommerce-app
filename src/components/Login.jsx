@@ -1,16 +1,19 @@
 import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import {
   generateToken,
   removeTokenFromRedux,
   removeUserDetails,
-  addAddress
-} from "../redux/loginRegisterSlice"
-import {  } from "../redux/loginRegisterSlice"; 
-import { ToastContainer } from "react-toastify";
+  addAddress,
+  setDeferredCartItem,
+  clearDeferredCartItem,  // <-- import this
+} from "../redux/loginRegisterSlice";
+import { addToCart } from "../redux/cartReducer"; // <-- import addToCart from your cart reducer
+import { ToastContainer,toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
@@ -23,15 +26,28 @@ const Login = () => {
   const token = useSelector((state) => state.auth.token);
   const name = useSelector((state) => state.auth.name);
   const emailRedux = useSelector((state) => state.auth.email);
-
+  const deferredCartItem = useSelector((state) => state.auth.deferredCartItem); // <-- get deferredCartItem
 
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
-   useEffect(() => {
+  useEffect(() => {
     if (token) {
-      navigate("/address"); 
+      navigate("/address");
     }
   }, [token, navigate]);
+
+  // New useEffect: After login success, add deferred cart item if any
+useEffect(() => {
+  if (token && deferredCartItem) {
+    dispatch(addToCart(deferredCartItem));
+    dispatch(clearDeferredCartItem());
+
+    toast.success("Product added to cart after login", {
+      style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' },
+    });
+  }
+}, [token]);
+
 
   const handleButtonClick = () => {
     const emailVal = email.current.value;
@@ -45,37 +61,37 @@ const Login = () => {
     }
   };
 
-const handleGuestLogin = async () => {
-  const guestCredentials = {
-    email: "virat@gmail.com",
-    password: "Virat@123"
+  const handleGuestLogin = async () => {
+    const guestCredentials = {
+      email: "virat@gmail.com",
+      password: "Virat@123",
+    };
+
+    if (email.current && password.current) {
+      email.current.value = guestCredentials.email;
+      password.current.value = guestCredentials.password;
+    }
+
+    const result = await dispatch(generateToken(guestCredentials));
+
+    if (generateToken.fulfilled.match(result)) {
+      dispatch(
+        addAddress({
+          id: Date.now(),
+          name: "Virat Kohli",
+          house: "18",
+          city: "Hyderabad",
+          state: "Hyderabad",
+          country: "India",
+          postalCode: "110001",
+          number: "123456789",
+        })
+      );
+      navigate("/address");
+    } else {
+      console.error("Guest login failed");
+    }
   };
-
-  // Autofill input fields
-  if (email.current && password.current) {
-    email.current.value = guestCredentials.email;
-    password.current.value = guestCredentials.password;
-  }
-
-  const result = await dispatch(generateToken(guestCredentials));
-
-  if (generateToken.fulfilled.match(result)) {
-    dispatch(addAddress({
-      id: Date.now(),
-      name: "Virat Kohli",
-      house: "18",
-      city: "Hyderabad",
-      state: "Hyderabad",
-      country: "India",
-      postalCode: "110001",
-      number: "123456789",
-    }));
-    navigate("/address");
-  } else {
-    console.error("Guest login failed");
-  }
-};
-
 
   const handleLogout = () => {
     dispatch(removeTokenFromRedux(null));
@@ -97,8 +113,12 @@ const handleGuestLogin = async () => {
                     <>
                       <h2 className="text-center mb-4">Welcome Back!</h2>
                       <div className="text-center">
-                        <p><strong>Name:</strong> {name || "Guest User"}</p>
-                        <p><strong>Email:</strong> {emailRedux || "Not Available"}</p>
+                        <p>
+                          <strong>Name:</strong> {name || "Guest User"}
+                        </p>
+                        <p>
+                          <strong>Email:</strong> {emailRedux || "Not Available"}
+                        </p>
                       </div>
                       <button
                         onClick={handleLogout}
@@ -111,7 +131,9 @@ const handleGuestLogin = async () => {
                     <>
                       <h2 className="text-center mb-3">Sign In</h2>
                       <form onSubmit={(e) => e.preventDefault()}>
-                        <label htmlFor="emailInput" className="form-label">Email Address:</label>
+                        <label htmlFor="emailInput" className="form-label">
+                          Email Address:
+                        </label>
                         <input
                           ref={email}
                           type="email"
@@ -120,7 +142,9 @@ const handleGuestLogin = async () => {
                           placeholder="Enter mail address"
                         />
                         <br />
-                        <label htmlFor="password" className="form-label">Password:</label>
+                        <label htmlFor="password" className="form-label">
+                          Password:
+                        </label>
                         <input
                           ref={password}
                           type="password"
