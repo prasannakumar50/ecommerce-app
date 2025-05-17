@@ -78,8 +78,8 @@ const ShippingAddress = () => {
   return (
     <div>
       <Header />
-      <main>
-      <div className="container mt-5 p-4 shadow rounded" style={{ maxWidth: "400px" }}>
+      <main className="bg-light py-3">
+      <div className="container mt-5 p-4 mb-5 shadow rounded" style={{ maxWidth: "400px" }}>
         <h2>Shipping Address</h2>
 
         <p>Choose from saved addresses:</p>
