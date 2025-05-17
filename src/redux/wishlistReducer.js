@@ -1,7 +1,9 @@
+// Initialize from localStorage
 const initialState = {
-  wishlistItems: [],
+  wishlistItems: JSON.parse(localStorage.getItem("wishlistItems")) || [],
 };
 
+// Action Creators
 export const addToWishlist = (product) => ({
   type: "ADD_TO_WISHLIST",
   payload: product,
@@ -12,21 +14,29 @@ export const removeFromWishlist = (productId) => ({
   payload: productId,
 });
 
+// Reducer
 const wishlistReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_TO_WISHLIST":
-      console.log("Reducer - ADD_TO_WISHLIST:", action.payload);
+    case "ADD_TO_WISHLIST": {
+      const updatedWishlist = [...state.wishlistItems, action.payload];
+      localStorage.setItem("wishlistItems", JSON.stringify(updatedWishlist));
       return {
         ...state,
-        wishlistItems: [...state.wishlistItems, action.payload],
+        wishlistItems: updatedWishlist,
       };
-    case "REMOVE_FROM_WISHLIST":
+    }
+
+    case "REMOVE_FROM_WISHLIST": {
+      const updatedWishlist = state.wishlistItems.filter(
+        (item) => item._id !== action.payload
+      );
+      localStorage.setItem("wishlistItems", JSON.stringify(updatedWishlist));
       return {
         ...state,
-        wishlistItems: state.wishlistItems.filter(
-          (item) => item._id !== action.payload
-        ),
+        wishlistItems: updatedWishlist,
       };
+    }
+
     default:
       return state;
   }
