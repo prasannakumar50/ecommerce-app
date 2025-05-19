@@ -4,6 +4,7 @@ import { addToCart } from "../redux/cartReducer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Header from "./Header";
 import ProductCard from "./ProductCard";
@@ -11,6 +12,7 @@ import ProductCard from "./ProductCard";
 const WishlistPage = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   
   const wishlistItems = useSelector((state) => {
     console.log("Redux State in WishlistPage:", state);
@@ -51,17 +53,19 @@ const WishlistPage = () => {
         ) : filteredWishlistItems.length === 0 ? (
           <p className="text-center">No items match your search.</p>
         ) : (
-          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             {filteredWishlistItems.map((item) => (
-              <div key={item._id} className="col">
-                <ProductCard
-                  product={item}
-                  onAddToCart={() => handleAddToCart(item)}
-                  onAddToWishlist={() => handleAddToWishlist(item)}
-                  onRemoveFromWishlist={() => handleRemoveFromWishlist(item._id)}
-                  isInWishlist={true}
-                />
-              </div>
+              <ProductCard
+                key={item._id}
+                product={item}
+                onAddToCart={() => handleAddToCart(item)}
+                onAddToWishlist={() => handleAddToWishlist(item)}
+                onRemoveFromWishlist={() => handleRemoveFromWishlist(item._id)}
+                isInWishlist={true}
+                handleCardClick={(id) => navigate(`/products/${id}`)}
+                handleFavoriteClick={() => handleRemoveFromWishlist(item._id)}
+                handleAddToCart={() => handleAddToCart(item)}
+              />
             ))}
           </div>
         )}
