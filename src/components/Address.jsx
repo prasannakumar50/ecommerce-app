@@ -30,7 +30,6 @@ const Address = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(null);
-  const [search, setSearch] = useState("");
 
   const [isEditing, setIsEditing] = useState({ userName: false, email: false });
   const [currUser, setCurrUser] = useState(user || {});
@@ -139,7 +138,7 @@ const Address = () => {
 
   return (
     <div>
-      <Header wishlist={wishlistItems} search={search} setSearch={setSearch}/>
+      <Header wishlist={wishlistItems} />
       <div className="container py-5">
         <div className="card p-4 shadow rounded-3">
           <h5 className="mb-3">Address List</h5>
