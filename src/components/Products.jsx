@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';        
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import Header from "./Header";
 import useFetch from "../useFetch";
@@ -17,17 +17,20 @@ import { clearDeferredCartItem } from "../redux/loginRegisterSlice";
 const Products = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
   const token = useSelector((state) => state.auth?.token);
   const isGuest = useSelector((state) => state.auth?.isGuest);
   const deferredItem = useSelector((state) => state.auth?.deferredCartItem);
+  
+  // State variables
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [price, setPrice] = useState(1500);
   const [search, setSearch] = useState("");
-
-
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedSort, setSelectedSort] = useState("");
 
   const { data =[], loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
@@ -107,6 +110,41 @@ const Products = () => {
     );
   };
 
+  const updateSearchParams = (key, value) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (value) {
+      newParams.set(key, value);
+    } else {
+      newParams.delete(key);
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleRatingChange = (rating) => {
+    setSelectedRating(rating);
+    updateSearchParams("rating", rating);
+  };
+
+  const handleSortChange = (sort) => {
+    setSelectedSort(sort);
+    updateSearchParams("sort", sort);
+  };
+
+  const handlePriceChange = (e) => {
+    const newPrice = Number(e.target.value);
+    setPrice(newPrice);
+    updateSearchParams("price", newPrice);
+  };
+
+  const clearFilters = (e) => {
+    e.preventDefault();
+    setSelectedCategories([]);
+    setPrice(1500);
+    setSelectedRating(0);
+    setSelectedSort("");
+    setSearchParams({});
+  };
+
   const categoryFilteredProducts =
     selectedCategories.length > 0
       ? data?.filter((product) =>
@@ -121,8 +159,15 @@ const Products = () => {
 
 
   const filteredProducts = categoryFilteredProducts?.filter(
-    (product) => product.price >= 100 && product.price <= price
-  );
+    (product) => 
+      product.price >= 100 && 
+      product.price <= price &&
+      (selectedRating === 0 || product.rating >= selectedRating)
+  ).sort((a, b) => {
+    if (selectedSort === "low-to-high") return a.price - b.price;
+    if (selectedSort === "high-to-low") return b.price - a.price;
+    return 0;
+  });
   //console.log("Titles:", filteredProducts.map(p => p.title));
 
   const finalFilteredProducts = filteredProducts.filter((p) => {
@@ -154,15 +199,9 @@ const Products = () => {
               <div className="card p-3">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="card-title mb-0">Filters</h5>
-                  <h5 className="mb-0">
-                    <a
-                      href="#"
-                      className="text-decoration-underline text-dark"
-                      onClick={() => setSelectedCategories([])}
-                    >
-                      Clear
-                    </a>
-                  </h5>
+                  <a href="#" className="text-decoration-underline text-dark" onClick={clearFilters}>
+                    Clear
+                  </a>
                 </div>
 
                 {/* Price Filter */}
@@ -174,7 +213,7 @@ const Products = () => {
                     min="100"
                     max="1500"
                     value={price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
+                    onChange={handlePriceChange}
                   />
                   <div className="d-flex justify-content-between">
                     <span>₹100</span>
@@ -212,6 +251,8 @@ const Products = () => {
                         type="radio"
                         id={`rating-${star}`}
                         name="rating"
+                        checked={selectedRating === star}
+                        onChange={() => handleRatingChange(star)}
                       />
                       <label className="form-check-label" htmlFor={`rating-${star}`}>
                         {star} Stars & above
@@ -229,6 +270,8 @@ const Products = () => {
                       type="radio"
                       id="low-to-high"
                       name="sort"
+                      checked={selectedSort === "low-to-high"}
+                      onChange={() => handleSortChange("low-to-high")}
                     />
                     <label className="form-check-label" htmlFor="low-to-high">
                       Price - Low to High
@@ -240,6 +283,8 @@ const Products = () => {
                       type="radio"
                       id="high-to-low"
                       name="sort"
+                      checked={selectedSort === "high-to-low"}
+                      onChange={() => handleSortChange("high-to-low")}
                     />
                     <label className="form-check-label" htmlFor="high-to-low">
                       Price - High to Low
