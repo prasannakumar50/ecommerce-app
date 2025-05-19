@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from "./redux/cartReducer";
-import wishlistReducer from './redux/wishlistReducer';
+import { PersistGate } from 'redux-persist/integration/react';  // import PersistGate
+import { store, persistor} from "./redux/store"
+
 import './index.css';
 import App from './App';
 import Products from './components/Products';
@@ -14,27 +14,17 @@ import CategoryPage from './components/CategoryPage';
 import WishlistPage from './components/WishlistPage';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
-import loginRegisterReducer from './redux/loginRegisterSlice';
 import Address from './components/Address';
 import ShippingAddress from './components/ShippingAddress';
 import OrderSummary from './components/OrderSummary';
 import OrderSuccessfull from './components/OrderSuccessfull';
 
-
-const store = configureStore({
-  reducer: {
-    cart: cartReducer,
-    wishlist: wishlistReducer,
-    auth: loginRegisterReducer,
-    
-  },
-});
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
- 
+      <PersistGate loading={null} persistor={persistor}>  {/* add PersistGate here */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
@@ -49,10 +39,9 @@ root.render(
             <Route path="/shipping-address" element={<ShippingAddress />} />
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="/order-successful" element={<OrderSuccessfull />} />
-
           </Routes>
         </BrowserRouter>
-      
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

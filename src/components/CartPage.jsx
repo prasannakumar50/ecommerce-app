@@ -16,6 +16,13 @@ const CartPage = () => {
     (state) => state.wishlist?.wishlistItems || []
   );
   const [quantities, setQuantities] = useState({});
+  const [search, setSearch] = useState("");
+
+  // Filter cart items based on search term
+  const filteredCartItems = cartItems.filter(item =>
+    item.title.toLowerCase().includes(search.toLowerCase()) ||
+    item.description?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const IncreaseQuantity = (id) => {
     setQuantities((prev) => ({
@@ -57,7 +64,7 @@ const CartPage = () => {
 
   return (
     <div>
-      <Header wishlist={wishlistItems} />
+      <Header wishlist={wishlistItems} search={search} setSearch={setSearch} />
 
       <main className="bg-light py-4">
         <div className="container">
@@ -69,77 +76,81 @@ const CartPage = () => {
             <div className="row">
               {/* Cart Items */}
               <div className="col-md-7">
-                {cartItems.map((item) => (
-                  <div
-                    key={item._id}
-                    className="card mb-3"
-                    style={{ maxWidth: "540px" }}
-                  >
-                    <div className="row g-0">
-                      <div className="col-md-4">
-                        <img
-                          src={item.imageUrl}
-                          alt={item.name}
-                          className="img-fluid rounded-start"
-                        />
-                      </div>
-                      <div className="col-md-8">
-                        <div className="card-body">
-                          <h5 className="card-title">
-                            <b>{item.title}</b>
-                          </h5>
-                          <p className="card-text">
-                            <b>Rs.{item.price}</b>
-                          </p>
-                          <div className="py-2">
-                            <button
-                              className="btn btn-dark me-3"
-                              onClick={() => DecreaseQuantity(item._id)}
-                            >
-                              <b>-</b>
-                            </button>
-                            <span className="me-3">
-                              <b>{quantities[item._id] || 1}</b>
-                            </span>
-                            <button
-                              className="btn btn-dark"
-                              onClick={() => IncreaseQuantity(item._id)}
-                            >
-                              <b>+</b>
-                            </button>
-                          </div>
-                          <div className="mt-3">
-                            <button
-                              className="btn btn-dark me-2"
-                              onClick={() => {
-                                dispatch(addToWishlist(item));
-                                dispatch({
-                                  type: "REMOVE_FROM_CART",
-                                  payload: item._id,
-                                });
-                                toast.success("Product moved to Wishlist!");
-                              }}
-                            >
-                              <b>Move to Wishlist</b>
-                            </button>
-                            <button
-                              className="btn btn-dark text-white"
-                              onClick={() => {
-                                dispatch({
-                                  type: "REMOVE_FROM_CART",
-                                  payload: item._id,
-                                });
-                                toast.warning("Product removed from Cart!");
-                              }}
-                            >
-                              <b>Remove from Cart</b>
-                            </button>
+                {filteredCartItems.length === 0 ? (
+                  <p className="text-center">No items match your search.</p>
+                ) : (
+                  filteredCartItems.map((item) => (
+                    <div
+                      key={item._id}
+                      className="card mb-3"
+                      style={{ maxWidth: "540px" }}
+                    >
+                      <div className="row g-0">
+                        <div className="col-md-4">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="img-fluid rounded-start"
+                          />
+                        </div>
+                        <div className="col-md-8">
+                          <div className="card-body">
+                            <h5 className="card-title">
+                              <b>{item.title}</b>
+                            </h5>
+                            <p className="card-text">
+                              <b>Rs.{item.price}</b>
+                            </p>
+                            <div className="py-2">
+                              <button
+                                className="btn btn-dark me-3"
+                                onClick={() => DecreaseQuantity(item._id)}
+                              >
+                                <b>-</b>
+                              </button>
+                              <span className="me-3">
+                                <b>{quantities[item._id] || 1}</b>
+                              </span>
+                              <button
+                                className="btn btn-dark"
+                                onClick={() => IncreaseQuantity(item._id)}
+                              >
+                                <b>+</b>
+                              </button>
+                            </div>
+                            <div className="mt-3">
+                              <button
+                                className="btn btn-dark me-2"
+                                onClick={() => {
+                                  dispatch(addToWishlist(item));
+                                  dispatch({
+                                    type: "REMOVE_FROM_CART",
+                                    payload: item._id,
+                                  });
+                                  toast.success("Product moved to Wishlist!");
+                                }}
+                              >
+                                <b>Move to Wishlist</b>
+                              </button>
+                              <button
+                                className="btn btn-dark text-white"
+                                onClick={() => {
+                                  dispatch({
+                                    type: "REMOVE_FROM_CART",
+                                    payload: item._id,
+                                  });
+                                  toast.warning("Product removed from Cart!");
+                                }}
+                              >
+                                <b>Remove from Cart</b>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
 
               {/* Price Details */}

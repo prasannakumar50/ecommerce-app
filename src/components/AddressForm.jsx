@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addAddresses, updateAddress } from "../redux/loginRegisterSlice";
+import { toast } from "react-toastify";
 
 const AddressForm = ({ address, setShowModal }) => {
   const dispatch = useDispatch();
+  const existingAddresses = useSelector((state) => state.auth.addresses);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -45,10 +47,35 @@ const AddressForm = ({ address, setShowModal }) => {
       id: address?.id || address?._id || Date.now(),
     };
 
+    // Check for duplicate address
+    const isDuplicate = existingAddresses.some((addr) => 
+      !address && // Only check for duplicates when adding new address
+      addr.name === payload.name &&
+      addr.house === payload.house &&
+      addr.city === payload.city &&
+      addr.state === payload.state &&
+      addr.country === payload.country &&
+      addr.postalCode === payload.postalCode &&
+      addr.number === payload.number
+    );
+
+    if (isDuplicate) {
+      toast.error("This address already exists!", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+      return;
+    }
+
     if (address) {
       dispatch(updateAddress(payload));
+      toast.success("Address updated successfully!", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
     } else {
       dispatch(addAddresses(payload));
+      toast.success("Address added successfully!", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
     }
 
     setShowModal(false);

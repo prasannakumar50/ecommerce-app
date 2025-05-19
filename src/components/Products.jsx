@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';        
+import { useLocation } from "react-router-dom";
 
 import Header from "./Header";
 import useFetch from "../useFetch";
@@ -9,13 +10,19 @@ import ProductCard from "./ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addToWishlist, removeFromWishlist, } from "../redux/wishlistReducer";
 import { addToCart } from "../redux/cartReducer"; 
+import { setDeferredCartItem } from "../redux/loginRegisterSlice";
+import { clearDeferredCartItem } from "../redux/loginRegisterSlice";
 
 
 const Products = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
+  const token = useSelector((state) => state.auth?.token);
+  const isGuest = useSelector((state) => state.auth?.isGuest);
+  const deferredItem = useSelector((state) => state.auth?.deferredCartItem);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [price, setPrice] = useState(1500);
   const [search, setSearch] = useState("");
@@ -25,6 +32,26 @@ const Products = () => {
   const { data =[], loading, error } = useFetch(
     "https://backend-products-pearl.vercel.app/products"
   );
+
+
+  useEffect(() => {
+  console.log("useEffect triggered");
+  console.log("Token:", token);
+  console.log("Is Guest:", isGuest);
+  console.log("Deferred item:", deferredItem);
+
+  if ((token || isGuest) && deferredItem) {
+    console.log("Dispatching addToCart");
+    dispatch(addToCart(deferredItem));
+    console.log("Dispatching clearDeferredCartItem");
+    dispatch(clearDeferredCartItem());
+    toast.success("Product added to cart", {
+      style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+    });
+  } else {
+    console.log("Condition not met: token/guest status or deferredItem missing");
+  }
+}, [token, isGuest, deferredItem, dispatch]);
 
 
   
@@ -54,17 +81,23 @@ const Products = () => {
     }
   };
 
-
   const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    toast.success(`Product added to cart`, {
-      style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
-    });
+    if (!token && !isGuest) {
+      // Store the product to be added after login
+      dispatch(setDeferredCartItem(product));
+      // Redirect to login with return path
+      navigate('/login', { state: { from: location } });
+      toast.info('Please login to add items to cart', {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+    } else {
+      dispatch(addToCart(product));
+      toast.success(`Product added to cart`, {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+    }
   };
 
-  useEffect(() => {
-    console.log("Updated wishlistItems:", wishlistItems);
-  }, [wishlistItems]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) =>

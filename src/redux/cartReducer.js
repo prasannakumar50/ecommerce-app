@@ -1,4 +1,5 @@
-// Initialize from localStorage
+// redux/cartReducer.js
+
 const initialState = {
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
 };
@@ -19,56 +20,70 @@ export const updateQuantity = (productId, quantity) => ({
   payload: { _id: productId, quantity },
 });
 
+export const clearCart = () => ({
+  type: "CLEAR_CART",
+});
+
+export const resetStore = () => ({
+  type: "RESET_STORE",
+});
+
 // Reducer
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_TO_CART": {
-      const existingProductIndex = state.cartItems.findIndex(
+      const existingProduct = state.cartItems.find(
         (item) => item._id === action.payload._id
       );
 
-      let updatedCartItems;
-      if (existingProductIndex >= 0) {
-        updatedCartItems = state.cartItems.map((item, index) =>
-          index === existingProductIndex
+      let updatedCart;
+      if (existingProduct) {
+        updatedCart = state.cartItems.map((item) =>
+          item._id === action.payload._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        updatedCartItems = [
-          ...state.cartItems,
-          { ...action.payload, quantity: 1 },
-        ];
+        updatedCart = [...state.cartItems, { ...action.payload, quantity: 1 }];
       }
 
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       return {
         ...state,
-        cartItems: updatedCartItems,
+        cartItems: updatedCart,
       };
     }
 
     case "REMOVE_FROM_CART": {
-      const updatedCartItems = state.cartItems.filter(
+      const updatedCart = state.cartItems.filter(
         (item) => item._id !== action.payload
       );
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       return {
         ...state,
-        cartItems: updatedCartItems,
+        cartItems: updatedCart,
       };
     }
 
     case "UPDATE_QUANTITY": {
-      const updatedCartItems = state.cartItems.map((item) =>
+      const updatedCart = state.cartItems.map((item) =>
         item._id === action.payload._id
           ? { ...item, quantity: action.payload.quantity }
           : item
       );
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       return {
         ...state,
-        cartItems: updatedCartItems,
+        cartItems: updatedCart,
+      };
+    }
+
+    case "CLEAR_CART":
+    case "RESET_STORE": {
+      localStorage.removeItem("cartItems");
+      return {
+        ...state,
+        cartItems: [],
       };
     }
 

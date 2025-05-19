@@ -39,13 +39,14 @@ export const signUpUser = createAsyncThunk(
 
 // Initial state
 const initialState = {
-  token: localStorage.getItem("admin-token") || null,
+  token: null,
   name: "",
   email: "",
   status: "idle",
   error: null,
   addresses: [],
-  deferredCartItem: null, // NEW: to hold item added before login
+  deferredCartItem: null,
+  isGuest: false,
 };
 
 // Create slice
@@ -55,6 +56,9 @@ const loginRegisterSlice = createSlice({
   reducers: {
     removeTokenFromRedux: (state) => {
       state.token = null;
+      state.name = "";
+      state.email = "";
+      state.isGuest = false;
       localStorage.removeItem("admin-token");
     },
     removeUserDetails: (state) => {
@@ -84,6 +88,14 @@ const loginRegisterSlice = createSlice({
     clearDeferredCartItem: (state) => {
       state.deferredCartItem = null;
     },
+
+    // New reducer for guest login
+    setGuestLogin: (state) => {
+      state.isGuest = true;
+    },
+    setTokenFromStorage: (state, action) => {
+    state.token = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -99,7 +111,9 @@ const loginRegisterSlice = createSlice({
         state.name = name;
         state.email = email;
         state.error = null;
-        localStorage.setItem("admin-token", token);
+        if (!state.isGuest) {
+          localStorage.setItem("admin-token", token);
+        }
       })
       .addCase(generateToken.rejected, (state, action) => {
         state.status = "failed";
@@ -130,8 +144,10 @@ export const {
   addAddress,
   updateAddress,
   removeAddress,
-  setDeferredCartItem,   // New
-  clearDeferredCartItem, // New
+  setDeferredCartItem,
+  clearDeferredCartItem,
+  setGuestLogin,
+  setTokenFromStorage,
 } = loginRegisterSlice.actions;
 
 // Export reducer

@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
@@ -10,93 +10,109 @@ import {
   removeUserDetails,
   addAddress,
   setDeferredCartItem,
-  clearDeferredCartItem,  // <-- import this
+  clearDeferredCartItem,
+  setGuestLogin,
 } from "../redux/loginRegisterSlice";
-import { addToCart } from "../redux/cartReducer"; // <-- import addToCart from your cart reducer
-import { ToastContainer,toast } from "react-toastify";
+import { addToCart, clearCart } from "../redux/cartReducer";
+import { addToWishlist, clearWishlist } from "../redux/wishlistReducer";
+import { purgeStore } from "../redux/store";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const email = useRef(null);
-  const password = useRef(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnPath = location.state?.returnTo || '/address';
 
   const token = useSelector((state) => state.auth.token);
   const name = useSelector((state) => state.auth.name);
   const emailRedux = useSelector((state) => state.auth.email);
-  const deferredCartItem = useSelector((state) => state.auth.deferredCartItem); // <-- get deferredCartItem
-
-  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+  const deferredCartItem = useSelector((state) => state.auth.deferredCartItem);
 
   useEffect(() => {
     if (token) {
-      navigate("/address");
+      navigate(returnPath);
     }
-  }, [token, navigate]);
+  }, [token, navigate, returnPath]);
 
-  // New useEffect: After login success, add deferred cart item if any
-useEffect(() => {
-  if (token && deferredCartItem) {
-    dispatch(addToCart(deferredCartItem));
-    dispatch(clearDeferredCartItem());
+  useEffect(() => {
+    if (token && deferredCartItem) {
+      dispatch(addToCart(deferredCartItem));
+      dispatch(clearDeferredCartItem());
+      toast.success("Product added to cart after login", {
+        style: { backgroundColor: "#000", color: "#fff", borderRadius: "8px" },
+      });
+    }
+  }, [token, deferredCartItem, dispatch]);
 
-    toast.success("Product added to cart after login", {
-      style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' },
-    });
-  }
-}, [token]);
-
-
-  const handleButtonClick = () => {
-    const emailVal = email.current.value;
-    const passwordVal = password.current.value;
-
-    const message = checkValidData(emailVal, passwordVal);
+  const handleButtonClick = async () => {
+    const message = checkValidData(email, password);
     setErrorMessage(message);
 
-    if (message === null) {
-      dispatch(generateToken({ email: emailVal, password: passwordVal }));
+    if (!message) {
+      const result = await dispatch(generateToken({ email, password }));
+
+      if (result.type === "generateToken/fulfilled") {
+        navigate(returnPath);
+      }
     }
   };
 
   const handleGuestLogin = async () => {
+    dispatch(setGuestLogin());
+
     const guestCredentials = {
       email: "virat@gmail.com",
       password: "Virat@123",
     };
 
-    if (email.current && password.current) {
-      email.current.value = guestCredentials.email;
-      password.current.value = guestCredentials.password;
-    }
+    setEmail(guestCredentials.email);
+    setPassword(guestCredentials.password);
 
     const result = await dispatch(generateToken(guestCredentials));
 
     if (generateToken.fulfilled.match(result)) {
-      dispatch(
-        addAddress({
-          id: Date.now(),
-          name: "Virat Kohli",
-          house: "18",
-          city: "Hyderabad",
-          state: "Hyderabad",
-          country: "India",
-          postalCode: "110001",
-          number: "123456789",
-        })
-      );
-      navigate("/address");
+      navigate(returnPath);
     } else {
       console.error("Guest login failed");
+      dispatch(removeTokenFromRedux());
     }
   };
 
-  const handleLogout = () => {
-    dispatch(removeTokenFromRedux(null));
-    dispatch(removeUserDetails({ name: "", email: "" }));
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    try {
+      // Clear cart items
+      dispatch(clearCart());
+      // Clear wishlist items
+      dispatch(clearWishlist());
+      // Clear auth state
+      dispatch(removeTokenFromRedux(null));
+      dispatch(removeUserDetails({ name: "", email: "" }));
+      setIsLoggedIn(false);
+      // Clear the guest default address flag
+      localStorage.removeItem('guestDefaultAddressAdded');
+      // Purge all persisted state
+      await purgeStore();
+      
+      // Show logout success message
+      toast.success("Logged out successfully", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+      
+      // Navigate to home page after logout
+      navigate('/');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast.error("Error during logout", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+    }
   };
 
   return (
@@ -109,7 +125,7 @@ useEffect(() => {
             <div className="col-lg-6 col-md-8 col-sm-12">
               <div className="card shadow-sm rounded-3">
                 <div className="card-body">
-                  {isLoggedIn ? (
+                  {token ? (
                     <>
                       <h2 className="text-center mb-4">Welcome Back!</h2>
                       <div className="text-center">
@@ -135,22 +151,24 @@ useEffect(() => {
                           Email Address:
                         </label>
                         <input
-                          ref={email}
                           type="email"
                           id="emailInput"
                           className="form-control"
                           placeholder="Enter mail address"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                         <br />
                         <label htmlFor="password" className="form-label">
                           Password:
                         </label>
                         <input
-                          ref={password}
                           type="password"
                           id="password"
                           className="form-control"
                           placeholder="Enter your password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         <br />
                         <p className="text-danger fw-bold">{errorMessage}</p>
@@ -171,7 +189,7 @@ useEffect(() => {
                         </div>
                       </form>
                       <p className="text-center mt-3">
-                        Don’t have an account? <Link to="/signup">Sign Up</Link>
+                        Don't have an account? <Link to="/signup">Sign Up</Link>
                       </p>
                     </>
                   )}

@@ -13,6 +13,11 @@ import {
   removeTokenFromRedux,
   removeUserDetails,
 } from "../redux/loginRegisterSlice";
+import { clearCart } from "../redux/cartReducer";
+import { clearWishlist } from "../redux/wishlistReducer";
+import { purgeStore } from "../redux/store";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Address = () => {
   const dispatch = useDispatch();
@@ -35,28 +40,33 @@ const Address = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/address");
+      return;
     }
 
-    const isGuest = user?.email === "virat@example.com";
-    if (isGuest && addresses.length === 0) {
-      const defaultGuestAddress = {
-        id: Date.now(),
-        name: "Virat",
-        house: "123",
-        city: "Hyderabad",
-        state: "Hyderabad",
-        country: "India",
-        postalCode: "100001",
-        number: "123456789",
-      };
+    // Only add default address for guest user if they have no addresses
+    const isGuest = user?.email === "virat@gmail.com";
+    
+    if (isGuest) {
+      // Clear any existing addresses first to prevent duplicates
+      if (addresses.length > 0) {
+        addresses.forEach(addr => {
+          dispatch(removeAddress(addr.id || addr._id));
+        });
+      }
 
-      const isDuplicate = addresses.some((addr) =>
-        addr.name === defaultGuestAddress.name &&
-        addr.house === defaultGuestAddress.house &&
-        addr.postalCode === defaultGuestAddress.postalCode
-      );
+      // Add the default guest address only if there are no addresses
+      if (addresses.length === 0) {
+        const defaultGuestAddress = {
+          id: Date.now(),
+          name: "Virat Kohli",
+          house: "18",
+          city: "Hyderabad",
+          state: "Hyderabad",
+          country: "India",
+          postalCode: "110001",
+          number: "123456789",
+        };
 
-      if (!isDuplicate) {
         dispatch({ type: "auth/addAddress", payload: defaultGuestAddress });
       }
     }
@@ -67,10 +77,33 @@ const Address = () => {
     setShowModal(true);
   };
 
-  const handleLogout = () => {
-    dispatch(removeTokenFromRedux());
-    dispatch(removeUserDetails());
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      // Clear cart items
+      dispatch(clearCart());
+      // Clear wishlist items
+      dispatch(clearWishlist());
+      // Clear auth state
+      dispatch(removeTokenFromRedux());
+      dispatch(removeUserDetails());
+      // Clear the guest default address flag
+      localStorage.removeItem('guestDefaultAddressAdded');
+      // Purge all persisted state
+      await purgeStore();
+      
+      // Show logout success message
+      toast.success("Logged out successfully", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+      
+      // Navigate to home page after logout
+      navigate('/');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast.error("Error during logout", {
+        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      });
+    }
   };
 
   const handleCloseModal = () => setShowModal(false);

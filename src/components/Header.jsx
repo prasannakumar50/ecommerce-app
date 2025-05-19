@@ -2,22 +2,42 @@ import { MdFavoriteBorder } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; 
 import { useState } from "react"; 
 
-const Header = ({ wishlist, search, setSearch }) => {
+const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems); 
+  const token = useSelector((state) => state.auth?.token);
+  const isGuest = useSelector((state) => state.auth?.isGuest);
   const cartCount = cartItems.length;
 
   const handleSearchChange = (event) => {
-    const query = event.target.value;
-    setSearch(query);
+    if (typeof setSearch === 'function') {
+      setSearch(event.target.value);
+    }
   };
 
-  // Check if the current route is the home page
+  const handleUserIconClick = () => {
+    if (token || isGuest) {
+      navigate('/address');
+    } else {
+      navigate('/login', { 
+        state: { 
+          from: location.pathname,
+          returnTo: '/address'
+        } 
+      });
+    }
+  };
+
+  // Check if the current route is the home page, cart page, or wishlist page
   const isHomePage = location.pathname === '/';
+  const isCartPage = location.pathname === '/cart';
+  const isWishlistPage = location.pathname === '/wishlist';
+  const shouldShowSearch = !isHomePage && !isCartPage && !isWishlistPage;
 
   return (
     <header className="py-2">
@@ -26,7 +46,7 @@ const Header = ({ wishlist, search, setSearch }) => {
           <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
 
           
-          {!isHomePage && (
+          {shouldShowSearch && (
             <div
               className="input-with-icon mx-auto"
               style={{
@@ -50,7 +70,7 @@ const Header = ({ wishlist, search, setSearch }) => {
                 className="form-control"
                 value={search} 
                 placeholder="Search"
-                onChange={e => setSearch(e.target.value)} 
+                onChange={handleSearchChange}
                 style={{
                   paddingLeft: "40px",
                   backgroundColor: "white",
@@ -121,9 +141,10 @@ const Header = ({ wishlist, search, setSearch }) => {
 
   {/* User Icon */}
   <div className="position-relative">
-    <Link to="/login" style={{ color: "black" }}>
-      <FaUserCircle style={{ fontSize: "1.7rem", cursor: "pointer" }} />
-    </Link>
+    <FaUserCircle 
+      style={{ fontSize: "1.7rem", cursor: "pointer" }} 
+      onClick={handleUserIconClick}
+    />
   </div>
 </div>
 

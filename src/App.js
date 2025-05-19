@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,  useDispatch } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { setTokenFromStorage } from "./redux/loginRegisterSlice";
 
 
 function App() {
@@ -15,11 +16,20 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+   const dispatch = useDispatch();
 
   const wishlistItems = useSelector((state) => {
     console.log("Redux State in WishlistPage:", state);
     return state.wishlist?.wishlistItems || [];
   });
+
+
+   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      dispatch(setTokenFromStorage(storedToken)); // this sets token in your Redux store
+    }
+  }, [dispatch]);
 
   // Fetch products from backend
   useEffect(() => {

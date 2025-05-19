@@ -14,6 +14,10 @@ export const removeFromWishlist = (productId) => ({
   payload: productId,
 });
 
+export const clearWishlist = () => ({
+  type: "CLEAR_WISHLIST",
+});
+
 // Reducer
 const wishlistReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -34,6 +38,15 @@ const wishlistReducer = (state = initialState, action) => {
       return {
         ...state,
         wishlistItems: updatedWishlist,
+      };
+    }
+
+    case "CLEAR_WISHLIST":
+    case "RESET_STORE": {
+      localStorage.removeItem("wishlistItems");
+      return {
+        ...state,
+        wishlistItems: [],
       };
     }
 
