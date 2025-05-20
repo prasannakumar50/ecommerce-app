@@ -87,25 +87,21 @@ const Login = () => {
 
   const handleLogout = async () => {
     try {
-      // Clear cart items
+     
       dispatch(clearCart());
-      // Clear wishlist items
-      dispatch(clearWishlist());
-      // Clear auth state
+      dispatch(clearWishlist()); 
       dispatch(removeTokenFromRedux(null));
       dispatch(removeUserDetails({ name: "", email: "" }));
       setIsLoggedIn(false);
-      // Clear the guest default address flag
-      localStorage.removeItem('guestDefaultAddressAdded');
-      // Purge all persisted state
+      localStorage.removeItem('guestDefaultAddressAdded');   
       await purgeStore();
       
-      // Show logout success message
+     
       toast.success("Logged out successfully", {
         style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
       });
       
-      // Navigate to home page after logout
+      
       navigate('/');
     } catch (error) {
       console.error('Error during logout:', error);

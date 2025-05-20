@@ -93,9 +93,9 @@ const Address = () => {
       localStorage.removeItem('guestDefaultAddressAdded');
       await purgeStore();
       
-      toast.success("Logged out successfully", {
-        style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
-      });
+      // toast.success("Logged out successfully", {
+      //   style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+      // });
       
       navigate('/');
     } catch (error) {
