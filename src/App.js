@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector,  useDispatch } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./styles/App.css";  // Updated import path
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -106,19 +107,14 @@ function App() {
     { name: "Kids", image: "https://angelandrocket.in/cdn/shop/files/AR7031_4.jpg?v=1725007955&width=400" },
     { name: "Sneakers", image: "https://images.unsplash.com/photo-1715693754047-4c0b56576495?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D" }
   ].map((category, index) => (
-    <div key={index} className="col-md-3">
+    <div key={index} className="col-6 col-md-3">
       <Link to={`/category?category=${category.name}`} className="text-decoration-none">
-        <div className="position-relative" style={{ cursor: "pointer" }}>
+        <div className="category-card hover-shadow">
           <img
             src={category.image}
             alt={category.name}
-            className="img-fluid"
-            style={{ width: "100%", height: "150px", objectFit: "cover", objectPosition: "top" }}
           />
-          <div
-            className="position-absolute bottom-0 start-0 bg-dark bg-opacity-50 text-white fw-bold fs-6 py-2 text-center"
-            style={{ width: "100%" }}
-          >
+          <div className="category-overlay">
             {category.name.toUpperCase()}
           </div>
         </div>
@@ -197,8 +193,8 @@ function App() {
             </div>
           </div>
           <div className="row py-2">
-            <div className="col-md-6 d-flex align-items-stretch">
-              <div className="card h-100">
+            <div className="col-12 col-md-6 d-flex align-items-stretch mb-3 mb-md-0">
+              <div className="card h-100 blog-card hover-shadow">
                 <img
                   src="https://cdn.shopaccino.com/qarot/articles/july1-542525_s.jpg?v=523"
                   className="card-img-top"
@@ -213,8 +209,8 @@ function App() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 d-flex align-items-stretch">
-              <div className="card h-100">
+            <div className="col-12 col-md-6 d-flex align-items-stretch">
+              <div className="card h-100 blog-card hover-shadow">
                 <img
                   src="https://cdn.shopaccino.com/qarot/articles/qarot-21-3-160956l-283101_l.jpg?v=523"
                   className="card-img-top"

@@ -40,119 +40,117 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
   const shouldShowSearch = !isHomePage && !isCartPage && !isWishlistPage;
 
   return (
-    <header className="py-2">
-      <nav>
-        <div className="container d-flex justify-content-between align-items-center py-2 text-dark">
-          <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
+    <>
+      <header className="py-2">
+        <nav>
+          <div className="container d-flex justify-content-between align-items-center py-2 text-dark">
+            <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
 
-          
-          {shouldShowSearch && (
-            <div
-              className="input-with-icon mx-auto"
-              style={{
-                position: "relative",
-                width: "100%",
-                maxWidth: "260px",
-              }}
-            >
-              <CiSearch
-                style={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#a0a0a0",
-                  fontSize: "20px",
-                }}
-              />
+            {/* Desktop Search - Hidden on Mobile */}
+            {shouldShowSearch && (
+              <div className="input-with-icon d-none d-md-block mx-auto" style={{ maxWidth: "260px" }}>
+                <CiSearch className="search-icon" />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={search} 
+                  placeholder="Search"
+                  onChange={handleSearchChange}
+                />
+              </div>
+            )}
+            
+            <div className="d-flex align-items-center gap-4">
+              <Link
+                to="/products"  
+                className="text-decoration-none text-dark fw-bold"
+                style={{ fontSize: "1rem", cursor: "pointer" }}
+              >
+                Products
+              </Link>
+
+              {/* Wishlist Icon with Count */}
+              <div className="position-relative">
+                <Link to="/wishlist">
+                  <MdFavoriteBorder
+                    style={{
+                      fontSize: "1.5rem",
+                      cursor: "pointer",
+                      color: "black"
+                    }}
+                  />
+                  {Array.isArray(wishlist) && wishlist.length > 0 && (
+                    <span
+                      className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "2px 6px",
+                        zIndex: 1,
+                        
+                      }}
+                    >
+                      {wishlist.length}
+                    </span>
+                  )}
+                </Link>
+              </div>
+
+              {/* Shopping Cart Icon with Count */}
+              <div className="position-relative">
+                <Link to="/cart">
+                  <LuShoppingCart
+                    style={{
+                      fontSize: "1.5rem",
+                      cursor: "pointer",
+                      color: "black"
+                    }}
+                  />
+                  {cartCount > 0 && (
+                    <span
+                      className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "2px 6px",
+                        zIndex: 1,
+                      }}
+                    >
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
+
+              {/* User Icon */}
+              <div className="position-relative">
+                <FaUserCircle 
+                  style={{ fontSize: "1.7rem", cursor: "pointer" }} 
+                  onClick={handleUserIconClick}
+                />
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Search - Only visible on mobile */}
+      {shouldShowSearch && (
+        <div className="mobile-search d-md-none">
+          <div className="container">
+            <div className="input-with-icon">
+              <CiSearch className="search-icon" />
               <input
                 type="text"
                 className="form-control"
                 value={search} 
                 placeholder="Search"
                 onChange={handleSearchChange}
-                style={{
-                  paddingLeft: "40px",
-                  backgroundColor: "white",
-                }}
               />
             </div>
-          )}
-          
-         <div className="d-flex align-items-center gap-4">
-  <Link
-    to="/products"  
-    className="text-decoration-none text-dark fw-bold"
-    style={{ fontSize: "1rem", cursor: "pointer" }}
-  >
-    Products
-  </Link>
-
-  {/* Wishlist Icon with Count */}
-  <div className="position-relative">
-    <Link to="/wishlist">
-      <MdFavoriteBorder
-        style={{
-          fontSize: "1.5rem",
-          cursor: "pointer",
-          color: "black"
-        }}
-      />
-      {Array.isArray(wishlist) && wishlist.length > 0 && (
-        <span
-          className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-          style={{
-            fontSize: "0.8rem",
-            padding: "2px 6px",
-            zIndex: 1,
-            
-          }}
-        >
-          {wishlist.length}
-        </span>
-      )}
-    </Link>
-  </div>
-
-  {/* Shopping Cart Icon with Count */}
-  <div className="position-relative">
-    <Link to="/cart">
-      <LuShoppingCart
-        style={{
-          fontSize: "1.5rem",
-          cursor: "pointer",
-          color: "black"
-        }}
-      />
-      {cartCount > 0 && (
-        <span
-          className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
-          style={{
-            fontSize: "0.8rem",
-            padding: "2px 6px",
-            zIndex: 1,
-          }}
-        >
-          {cartCount}
-        </span>
-      )}
-    </Link>
-  </div>
-
-  {/* User Icon */}
-  <div className="position-relative">
-    <FaUserCircle 
-      style={{ fontSize: "1.7rem", cursor: "pointer" }} 
-      onClick={handleUserIconClick}
-    />
-  </div>
-</div>
-
+          </div>
         </div>
-      </nav>
-    </header>
+      )}
+    </>
   );
 };
-
 
 export default Header;
