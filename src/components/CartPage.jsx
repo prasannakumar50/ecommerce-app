@@ -47,7 +47,7 @@ const CartPage = () => {
     });
   };
 
-  // ====== 🔢 Price Calculation Logic ======
+  // Price Calculation Logic ======
   const totalItems = cartItems.reduce(
     (total, item) => total + (quantities[item._id] || 1),
     0
