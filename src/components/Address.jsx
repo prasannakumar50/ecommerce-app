@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { FaUserCircle, FaPen, FaCheck } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
@@ -22,14 +22,17 @@ import "react-toastify/dist/ReactToastify.css";
 const Address = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const wishlistItems = useSelector((state) => state.wishlist?.wishlistItems || []);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const token = useSelector((state) => state.auth.token);
+  const isGuest = useSelector((state) => state.auth.isGuest);
   const addresses = useSelector((state) => state.auth.addresses);
   const user = useSelector((state) => state.auth.user);
 
   const [showModal, setShowModal] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(null);
+  const [defaultAddressAdded, setDefaultAddressAdded] = useState(false);
 
   const [isEditing, setIsEditing] = useState({ userName: false, email: false });
   const [currUser, setCurrUser] = useState(user || {});
@@ -37,24 +40,19 @@ const Address = () => {
   const [updatedEmail, setUpdatedEmail] = useState("");
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/address");
-      return;
+    if (!token && !isGuest) {
+      navigate("/login", { 
+        state: { 
+          from: location.pathname,
+          returnTo: '/address'
+        } 
+      });
     }
+  }, [token, isGuest, navigate, location.pathname]);
 
-    // Only add default address for guest user if they have no addresses
-    const isGuest = user?.email === "virat@gmail.com";
-    
-    if (isGuest) {
-      // Clear any existing addresses first to prevent duplicates
-      if (addresses.length > 0) {
-        addresses.forEach(addr => {
-          dispatch(removeAddress(addr.id || addr._id));
-        });
-      }
-
-      // Add the default guest address only if there are no addresses
-      if (addresses.length === 0) {
+  useEffect(() => {
+    if (isGuest && !defaultAddressAdded) {
+      const addDefaultGuestAddress = () => {
         const defaultGuestAddress = {
           id: Date.now(),
           name: "Virat Kohli",
@@ -67,9 +65,19 @@ const Address = () => {
         };
 
         dispatch({ type: "auth/addAddress", payload: defaultGuestAddress });
+        setDefaultAddressAdded(true);
+        toast.success("Default address added for guest user", {
+          style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+        });
+      };
+
+      if (addresses.length === 0) {
+        addDefaultGuestAddress();
+      } else {
+        setDefaultAddressAdded(true);
       }
     }
-  }, [isAuthenticated, navigate, user, addresses, dispatch]);
+  }, [isGuest, defaultAddressAdded, addresses.length, dispatch]);
 
   const handleAddAddressClick = () => {
     setCurrentAddress(null);
@@ -78,24 +86,17 @@ const Address = () => {
 
   const handleLogout = async () => {
     try {
-      // Clear cart items
       dispatch(clearCart());
-      // Clear wishlist items
       dispatch(clearWishlist());
-      // Clear auth state
       dispatch(removeTokenFromRedux());
       dispatch(removeUserDetails());
-      // Clear the guest default address flag
       localStorage.removeItem('guestDefaultAddressAdded');
-      // Purge all persisted state
       await purgeStore();
       
-      // Show logout success message
       toast.success("Logged out successfully", {
         style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
       });
       
-      // Navigate to home page after logout
       navigate('/');
     } catch (error) {
       console.error('Error during logout:', error);
