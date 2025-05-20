@@ -42,17 +42,18 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
   return (
     <>
       <header className="bg-white shadow-sm">
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container">
-            <Link to="/" className="navbar-brand">
-              <span className="brand-text">
+        <nav className="navbar navbar-expand-lg navbar-light py-2">
+          <div className="container d-flex align-items-center justify-content-between">
+            {/* Brand */}
+            <Link to="/" className="navbar-brand m-0">
+              <h1 className="brand-text m-0" style={{ fontSize: "1.8rem" }}>
                 Clovibe
-              </span>
+              </h1>
             </Link>
 
             {/* Desktop Search - Hidden on Mobile */}
             {shouldShowSearch && (
-              <div className="input-with-icon d-none d-md-block mx-auto" style={{ maxWidth: "260px" }}>
+              <div className="input-with-icon d-none d-md-block mx-4" style={{ maxWidth: "260px", flex: "1" }}>
                 <CiSearch className="search-icon" />
                 <input
                   type="text"
@@ -64,33 +65,32 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
               </div>
             )}
             
-            <div className="d-flex align-items-center gap-4">
+            {/* Navigation Items */}
+            <div className="d-flex align-items-center gap-3">
               <Link
                 to="/products"  
                 className="text-decoration-none text-dark fw-bold"
-                style={{ fontSize: "1rem", cursor: "pointer" }}
+                style={{ fontSize: "1rem" }}
               >
                 Products
               </Link>
 
               {/* Wishlist Icon with Count */}
-              <div className="position-relative">
-                <Link to="/wishlist">
+              <div className="position-relative d-flex align-items-center">
+                <Link to="/wishlist" className="text-dark">
                   <MdFavoriteBorder
                     style={{
                       fontSize: "1.5rem",
-                      cursor: "pointer",
-                      color: "black"
+                      cursor: "pointer"
                     }}
                   />
                   {Array.isArray(wishlist) && wishlist.length > 0 && (
                     <span
-                      className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                      className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                       style={{
-                        fontSize: "0.8rem",
-                        padding: "2px 6px",
-                        zIndex: 1,
-                        
+                        fontSize: "0.7rem",
+                        padding: "2px 5px",
+                        transform: "translate(-50%, -50%)"
                       }}
                     >
                       {wishlist.length}
@@ -100,22 +100,21 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
               </div>
 
               {/* Shopping Cart Icon with Count */}
-              <div className="position-relative">
-                <Link to="/cart">
+              <div className="position-relative d-flex align-items-center">
+                <Link to="/cart" className="text-dark">
                   <LuShoppingCart
                     style={{
                       fontSize: "1.5rem",
-                      cursor: "pointer",
-                      color: "black"
+                      cursor: "pointer"
                     }}
                   />
                   {cartCount > 0 && (
                     <span
-                      className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                      className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                       style={{
-                        fontSize: "0.8rem",
-                        padding: "2px 6px",
-                        zIndex: 1,
+                        fontSize: "0.7rem",
+                        padding: "2px 5px",
+                        transform: "translate(-50%, -50%)"
                       }}
                     >
                       {cartCount}
@@ -125,9 +124,13 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
               </div>
 
               {/* User Icon */}
-              <div className="position-relative">
+              <div className="d-flex align-items-center">
                 <FaUserCircle 
-                  style={{ fontSize: "1.7rem", cursor: "pointer" }} 
+                  style={{ 
+                    fontSize: "1.7rem", 
+                    cursor: "pointer",
+                    color: "black"
+                  }} 
                   onClick={handleUserIconClick}
                 />
               </div>
