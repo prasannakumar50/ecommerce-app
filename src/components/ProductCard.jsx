@@ -13,31 +13,30 @@ const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteCli
       style={{ cursor: "pointer" }}
     >
       {/* Make sure card is position-relative so favorite-icon can be positioned over it */}
-      <div className="card h-100 w-100 position-relative">
+      <div className="card h-100 w-100 position-relative hover-shadow">
         <div className="image-container">
           <img
             src={product.imageUrl}
             className="card-img-top"
             alt={product.title}
-            style={{ height: "260px", objectFit: "cover", }}
+            style={{ height: "260px", objectFit: "cover" }}
           />
           <div
             className="favorite-icon"
             style={{
-              position: "absolute", // moved here for consistency
+              position: "absolute",
               top: "10px",
               right: "10px",
               fontSize: "1.8rem",
               cursor: "pointer",
-              zIndex: 10, // bumped up for guaranteed visibility
+              zIndex: 10,
               backgroundColor: "white",
               borderRadius: "50%",
               padding: "6px",
-              
             }}
             onClick={(e) => {
-              e.stopPropagation(); // prevent card click
-              handleFavoriteClick(product); // trigger favorite logic
+              e.stopPropagation();
+              handleFavoriteClick(product);
             }}
           >
             {isInWishlist ? (
@@ -47,23 +46,17 @@ const ProductCard = ({ product, isInWishlist, handleCardClick, handleFavoriteCli
             )}
           </div>
         </div>
-
-        <div className="card-body d-flex flex-column justify-content-between">
-          <h6 className="card-title text-secondary">{product.title}</h6>
-          <p>
-            <b>
-              {product.currency} {product.price}
-            </b>
-          </p>
+        <div className="card-body d-flex flex-column">
+          <h5 className="product-title text-lg mb-2">{product.title}</h5>
+          <p className="price-text text-xl mb-3">₹{product.price}</p>
           <button
+            className="btn btn-dark mt-auto"
             onClick={(e) => {
               e.stopPropagation();
               handleAddToCart(product);
             }}
-            
-            className="btn btn-dark mt-2"
           >
-            <b>Add to Cart</b>
+            Add to Cart
           </button>
         </div>
       </div>

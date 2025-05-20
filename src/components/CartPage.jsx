@@ -82,7 +82,7 @@ const CartPage = () => {
                   filteredCartItems.map((item) => (
                     <div
                       key={item._id}
-                      className="card mb-3"
+                      className="card mb-3 hover-shadow"
                       style={{ maxWidth: "540px" }}
                     >
                       <div className="row g-0">
@@ -91,36 +91,37 @@ const CartPage = () => {
                             src={item.imageUrl}
                             alt={item.name}
                             className="img-fluid rounded-start"
+                            style={{ height: "100%", objectFit: "cover" }}
                           />
                         </div>
                         <div className="col-md-8">
                           <div className="card-body">
-                            <h5 className="card-title">
-                              <b>{item.title}</b>
-                            </h5>
-                            <p className="card-text">
-                              <b>Rs.{item.price}</b>
-                            </p>
-                            <div className="py-2">
+                            <h5 className="product-title mb-2">{item.title}</h5>
+                            <p className="price-text mb-3">₹{item.price}</p>
+                            
+                            {/* Quantity Controls */}
+                            <div className="d-flex align-items-center mb-3">
                               <button
-                                className="btn btn-dark me-3"
+                                className="btn btn-outline-dark btn-sm"
                                 onClick={() => DecreaseQuantity(item._id)}
+                                style={{ width: "32px", height: "32px", padding: 0 }}
                               >
-                                <b>-</b>
+                                -
                               </button>
-                              <span className="me-3">
-                                <b>{quantities[item._id] || 1}</b>
-                              </span>
+                              <span className="mx-3">{quantities[item._id] || 1}</span>
                               <button
-                                className="btn btn-dark"
+                                className="btn btn-outline-dark btn-sm"
                                 onClick={() => IncreaseQuantity(item._id)}
+                                style={{ width: "32px", height: "32px", padding: 0 }}
                               >
-                                <b>+</b>
+                                +
                               </button>
                             </div>
-                            <div className="mt-3">
+
+                            {/* Action Buttons */}
+                            <div className="d-flex gap-2">
                               <button
-                                className="btn btn-dark me-2"
+                                className="btn btn-dark flex-grow-1"
                                 onClick={() => {
                                   dispatch(addToWishlist(item));
                                   dispatch({
@@ -130,10 +131,10 @@ const CartPage = () => {
                                   toast.success("Product moved to Wishlist!");
                                 }}
                               >
-                                <b>Move to Wishlist</b>
+                                Move to Wishlist
                               </button>
                               <button
-                                className="btn btn-dark text-white"
+                                className="btn btn-dark flex-grow-1"
                                 onClick={() => {
                                   dispatch({
                                     type: "REMOVE_FROM_CART",
@@ -142,7 +143,7 @@ const CartPage = () => {
                                   toast.warning("Product removed from Cart!");
                                 }}
                               >
-                                <b>Remove from Cart</b>
+                                Remove
                               </button>
                             </div>
                           </div>

@@ -4,6 +4,7 @@ import { useSelector,  useDispatch } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./styles/App.css";  // Updated import path
+import "./styles/typography.css";  // Import custom typography styles
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";

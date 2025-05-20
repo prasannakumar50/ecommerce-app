@@ -41,10 +41,14 @@ const Header = ({ wishlist, search = "", setSearch = () => {} }) => {
 
   return (
     <>
-      <header className="py-2">
-        <nav>
-          <div className="container d-flex justify-content-between align-items-center py-2 text-dark">
-            <Link className="navbar-brand fs-3" to="/">MyShoppingSite</Link>
+      <header className="bg-white shadow-sm">
+        <nav className="navbar navbar-expand-lg navbar-light">
+          <div className="container">
+            <Link to="/" className="navbar-brand">
+              <span className="brand-text">
+                Clovibe
+              </span>
+            </Link>
 
             {/* Desktop Search - Hidden on Mobile */}
             {shouldShowSearch && (
