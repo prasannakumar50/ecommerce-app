@@ -14,6 +14,7 @@ function CategoryPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -60,8 +61,13 @@ function CategoryPage() {
 
       const matchesRating = selectedRating === 0 || product.rating >= selectedRating;
       const matchesPrice = product.price <= maxPrice;
+      
+      const searchTerm = search.toLowerCase();
+      const matchesSearch = searchTerm === "" || 
+        product.title.toLowerCase().includes(searchTerm) ||
+        (product.tags || []).some(tag => tag.toLowerCase().includes(searchTerm));
 
-      return matchesCategory && matchesRating && matchesPrice;
+      return matchesCategory && matchesRating && matchesPrice && matchesSearch;
     })
     .sort((a, b) => {
       if (selectedSort === "low-to-high") return a.price - b.price;
@@ -132,7 +138,7 @@ function CategoryPage() {
 
   return (
     <div>
-      <Header wishlist={wishlistItems} />
+      <Header wishlist={wishlistItems} search={search} setSearch={setSearch} />
     <main> 
       <div className="container mt-4">
         <div className="row">
