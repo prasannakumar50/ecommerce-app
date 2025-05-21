@@ -38,23 +38,11 @@ const Products = () => {
 
 
   useEffect(() => {
-  console.log("useEffect triggered");
-  console.log("Token:", token);
-  console.log("Is Guest:", isGuest);
-  console.log("Deferred item:", deferredItem);
-
-  if ((token || isGuest) && deferredItem) {
-    console.log("Dispatching addToCart");
-    dispatch(addToCart(deferredItem));
-    console.log("Dispatching clearDeferredCartItem");
-    dispatch(clearDeferredCartItem());
-    toast.success("Product added to cart", {
-      style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
-    });
-  } else {
-    console.log("Condition not met: token/guest status or deferredItem missing");
-  }
-}, [token, isGuest, deferredItem, dispatch]);
+    if (token && isGuest && deferredItem) {
+      dispatch(addToCart(deferredItem));
+      dispatch(clearDeferredCartItem());
+    }
+  }, [token, isGuest, deferredItem, dispatch]);
 
 
   

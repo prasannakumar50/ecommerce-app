@@ -15,8 +15,7 @@ const WishlistPage = () => {
   const navigate = useNavigate();
   
   const wishlistItems = useSelector((state) => {
-    console.log("Redux State in WishlistPage:", state);
-    return state.wishlist?.wishlistItems || [];
+    return state.wishlist.items;
   });
 
   // Filter wishlist items based on search term
