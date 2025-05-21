@@ -2,9 +2,13 @@
   Clovibe is a modern, responsive e-commerce web application built with React, featuring a clean user interface and robust functionality for online shopping.
 
 ## Installation
+
 git clone https://github.com/prasannakumar50/ecommerce-app.git
+
 cd ecommerce-app
+
 npm install
+
 npm start
 
 ## 🌟 Features
