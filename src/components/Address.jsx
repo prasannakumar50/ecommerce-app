@@ -66,9 +66,9 @@ const Address = () => {
 
         dispatch({ type: "auth/addAddress", payload: defaultGuestAddress });
         setDefaultAddressAdded(true);
-        toast.success("Default address added for guest user", {
-          style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
-        });
+        // toast.success("Default address added for guest user", {
+        //   style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
+        // });
       };
 
       if (addresses.length === 0) {
