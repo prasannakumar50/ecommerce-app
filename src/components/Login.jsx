@@ -80,7 +80,6 @@ const Login = () => {
     if (generateToken.fulfilled.match(result)) {
       navigate(returnPath);
     } else {
-      console.error("Guest login failed");
       dispatch(removeTokenFromRedux());
     }
   };
@@ -104,7 +103,6 @@ const Login = () => {
       
       navigate('/');
     } catch (error) {
-      console.error('Error during logout:', error);
       toast.error("Error during logout", {
         style: { backgroundColor: '#000', color: '#fff', borderRadius: '8px' }
       });

@@ -153,7 +153,7 @@ const Products = () => {
           )
         )
       : data;
-      //console.log("Category filtered products:", categoryFilteredProducts);
+     
   
 
 
@@ -168,7 +168,7 @@ const Products = () => {
     if (selectedSort === "high-to-low") return b.price - a.price;
     return 0;
   });
-  //console.log("Titles:", filteredProducts.map(p => p.title));
+  
 
   const finalFilteredProducts = filteredProducts.filter((p) => {
     const q = search.toLowerCase();
@@ -178,15 +178,6 @@ const Products = () => {
     );
   });
   
-
-  //console.log("Final filtered products:", finalFilteredProducts);
-  //console.log("Search term:", search);
-  //console.log("Matching products:", finalFilteredProducts.map(p => p.title));
-
-
-
-
-
   return (
     <div>
       <Header wishlist={wishlistItems} search={search} setSearch={setSearch}/>

@@ -9,7 +9,7 @@ import loginRegisterReducer from './loginRegisterSlice';
 const rootPersistConfig = {
   key: 'root',
   storage,
-  whitelist: [], // Don't persist anything at root level
+  whitelist: [], 
 };
 
 // Persist config for each slice
