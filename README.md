@@ -48,10 +48,10 @@ npm start
   - Optimized for all screen sizes
 
 -  🔒Authentication Pages
-  - Login
-  - Signup
-  - Logout functionality
-  - Protected routes
+   - Login
+   - Signup
+   - Logout functionality
+   - Protected routes
 
 - 🛒 Shopping Pages
   - Cart Management Page
