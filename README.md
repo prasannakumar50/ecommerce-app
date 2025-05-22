@@ -30,7 +30,6 @@
   - Checkout process
 
 ## 🖥️📱 Screens – Desktop & Mobile Views
-
 - 🏠Landing Page
   - Featured products
   - Category showcase
@@ -48,8 +47,7 @@
    - Login
    - Signup
    - Logout functionality
-  
-
+   - 
 - 🛒 Shopping Pages
   - Cart Management Page
   - Wishlist Management Page
@@ -80,10 +78,8 @@
   - Express.js
   - Mongoose (MongoDB ODM)
   - CORS (Cross-Origin Resource Sharing)
-
 - **Database**
-  - MongoDB
- 
+  - MongoDB 
 - **Authentication**
   - JWT (JSON Web Tokens)
   
