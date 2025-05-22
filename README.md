@@ -3,14 +3,10 @@
   Link(https://ecommerce-app-self-tau.vercel.app/ )
 
 ## Installation
-
-git clone https://github.com/prasannakumar50/ecommerce-app.git
-
-cd ecommerce-app
-
-npm install
-
-npm start
+   -git clone https://github.com/prasannakumar50/ecommerce-app.git
+   -cd ecommerce-app
+   -npm install
+   -npm start
 
 ## 🌟 Features
 
@@ -52,7 +48,7 @@ npm start
    - Login
    - Signup
    - Logout functionality
-   - Protected routes
+  
 
 - 🛒 Shopping Pages
   - Cart Management Page
@@ -90,4 +86,4 @@ npm start
  
 - **Authentication**
   - JWT (JSON Web Tokens)
-  - Bcrypt (Password Hashing)
+  
