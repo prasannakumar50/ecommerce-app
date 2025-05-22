@@ -9,7 +9,6 @@
    - npm start
 
 ## 🌟 Features
-
 - **User Authentication**
   - Secure login/signup system
   - Guest user support
@@ -56,7 +55,6 @@
 
 
 ## 🛠️ Technologies Used
-
 ### Frontend
 - **Core**
   - React.js
@@ -64,7 +62,7 @@
   - Redux Toolkit Query (API Integration)
   - Redux Persist (State Persistence)
   - React Router (Navigation)
-
+  
 - **Styling & UI**
   - Bootstrap 5
   - React Icons
