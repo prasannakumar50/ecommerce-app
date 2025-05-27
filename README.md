@@ -3,17 +3,12 @@
   Link(https://ecommerce-app-self-tau.vercel.app/ )
 
 ## Installation
-
-git clone https://github.com/prasannakumar50/ecommerce-app.git
-
-cd ecommerce-app
-
-npm install
-
-npm start
+   - git clone https://github.com/prasannakumar50/ecommerce-app.git
+   - cd ecommerce-app
+   - npm install
+   - npm start
 
 ## 🌟 Features
-
 - **User Authentication**
   - Secure login/signup system
   - Guest user support
@@ -34,7 +29,6 @@ npm start
   - Checkout process
 
 ## 🖥️📱 Screens – Desktop & Mobile Views
-
 - 🏠Landing Page
   - Featured products
   - Category showcase
@@ -52,8 +46,7 @@ npm start
    - Login
    - Signup
    - Logout functionality
-   - Protected routes
-
+   - 
 - 🛒 Shopping Pages
   - Cart Management Page
   - Wishlist Management Page
@@ -62,7 +55,6 @@ npm start
 
 
 ## 🛠️ Technologies Used
-
 ### Frontend
 - **Core**
   - React.js
@@ -70,7 +62,7 @@ npm start
   - Redux Toolkit Query (API Integration)
   - Redux Persist (State Persistence)
   - React Router (Navigation)
-
+  
 - **Styling & UI**
   - Bootstrap 5
   - React Icons
@@ -84,10 +76,8 @@ npm start
   - Express.js
   - Mongoose (MongoDB ODM)
   - CORS (Cross-Origin Resource Sharing)
-
 - **Database**
-  - MongoDB
- 
+  - MongoDB 
 - **Authentication**
   - JWT (JSON Web Tokens)
-  - Bcrypt (Password Hashing)
+  
