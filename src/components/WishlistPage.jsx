@@ -14,9 +14,9 @@ const WishlistPage = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   
-  const wishlistItems = useSelector((state) => {
-    return state.wishlist.items;
-  });
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems || []);
+
+
 
   // Filter wishlist items based on search term
   const filteredWishlistItems = wishlistItems.filter(item =>
