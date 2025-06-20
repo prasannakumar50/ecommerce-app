@@ -12,6 +12,7 @@ import {
   removeAddress,
   removeTokenFromRedux,
   removeUserDetails,
+  clearAddresses,
 } from "../redux/loginRegisterSlice";
 import { clearCart } from "../redux/cartReducer";
 import { clearWishlist } from "../redux/wishlistReducer";
@@ -90,6 +91,7 @@ const Address = () => {
       dispatch(clearWishlist());
       dispatch(removeTokenFromRedux());
       dispatch(removeUserDetails());
+      dispatch(clearAddresses());
       localStorage.removeItem('guestDefaultAddressAdded');
       await purgeStore();
       

@@ -1,15 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "https://jwt-auth-backend-taupe.vercel.app";
-
+const API_URL = "http://localhost:4000";
 
 // Async thunk for login
 export const generateToken = createAsyncThunk(
   "auth/generateToken",
-  async (_, { rejectWithValue }) => {
+  async (userDetails, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/admin/login`, { secret: "supersecretadmin" }, {
+      const response = await axios.post(`${API_URL}/login`, userDetails, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -18,6 +17,7 @@ export const generateToken = createAsyncThunk(
     } catch (err) {
       if (err.response) {
         console.error("Login error response:", err.response.data);
+        return rejectWithValue(err.response.data.message || "Invalid credentials");
       }
       return rejectWithValue("Invalid credentials");
     }
@@ -36,6 +36,10 @@ export const signUpUser = createAsyncThunk(
       });
       return response.data;
     } catch (err) {
+      if (err.response) {
+        console.error("Signup error response:", err.response.data);
+        return rejectWithValue(err.response.data.message || "Registration failed");
+      }
       return rejectWithValue("Registration failed");
     }
   }
@@ -100,6 +104,9 @@ const loginRegisterSlice = createSlice({
     setTokenFromStorage: (state, action) => {
     state.token = action.payload;
     },
+    clearAddresses: (state) => {
+      state.addresses = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -152,6 +159,7 @@ export const {
   clearDeferredCartItem,
   setGuestLogin,
   setTokenFromStorage,
+  clearAddresses,
 } = loginRegisterSlice.actions;
 
 // Export reducer

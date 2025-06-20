@@ -1,29 +1,46 @@
 import { Link, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import { useState } from "react";
-import { v4 as uuid } from "uuid"; 
+import { v4 as uuid } from "uuid";
+import axios from "axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    _id: uuid(), 
+    _id: uuid(),
     name: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // You can now send formData including the _id to backend
-    console.log("Submitting User:", formData);
-
-    // After successful signup
-    navigate("/address");
+    setError("");
+    setSuccess("");
+    try {
+      // Send POST request to backend /register endpoint
+      const res = await axios.post("http://localhost:4000/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      setSuccess(res.data.message || "Registration successful!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Registration failed. Please try again.");
+      }
+    }
   };
 
   return (
@@ -67,6 +84,8 @@ const SignUp = () => {
                       onChange={handleChange}
                     />
                     <br />
+                    {error && <p className="text-danger fw-bold">{error}</p>}
+                    {success && <p className="text-success fw-bold">{success}</p>}
                     <div className="d-grid gap-2">
                       <button type="submit" className="btn btn-dark text-white">Sign Up</button>
                     </div>
