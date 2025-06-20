@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "https://jwt-auth-backend-production-1fbf.up.railway.app";
+const API_URL = "https://jwt-auth-backend-taupe.vercel.app";
+
 
 // Async thunk for login
 export const generateToken = createAsyncThunk(
