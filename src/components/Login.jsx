@@ -66,22 +66,7 @@ const Login = () => {
 
   const handleGuestLogin = async () => {
     dispatch(setGuestLogin());
-
-    const guestCredentials = {
-      email: "virat@gmail.com",
-      password: "Virat@123",
-    };
-
-    setEmail(guestCredentials.email);
-    setPassword(guestCredentials.password);
-
-    const result = await dispatch(generateToken(guestCredentials));
-
-    if (generateToken.fulfilled.match(result)) {
-      navigate(returnPath);
-    } else {
-      dispatch(removeTokenFromRedux());
-    }
+    navigate(returnPath);
   };
 
   const handleLogout = async () => {
