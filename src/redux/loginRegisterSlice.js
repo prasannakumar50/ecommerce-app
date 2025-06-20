@@ -7,15 +7,18 @@ const API_URL = "https://jwt-auth-backend-taupe.vercel.app";
 // Async thunk for login
 export const generateToken = createAsyncThunk(
   "auth/generateToken",
-  async (userDetails, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/admin/login`, userDetails, {
+      const response = await axios.post(`${API_URL}/admin/login`, { secret: "supersecretadmin" }, {
         headers: {
           "Content-Type": "application/json",
         },
       });
       return response.data;
     } catch (err) {
+      if (err.response) {
+        console.error("Login error response:", err.response.data);
+      }
       return rejectWithValue("Invalid credentials");
     }
   }
